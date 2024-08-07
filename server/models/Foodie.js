@@ -2,9 +2,10 @@ const {Schema, model} = require('mongoose');
 const bcrypt = require('bcrypt');
 const {ObjectId} = Schema.Types;
 const Comment = require('./Comment');
+const Recipe = require('./Recipe');
 
 const foodieSchema = new Schema({
-    name: {
+    username: {
         type: String,
         required: true,
         unique: true,
@@ -22,7 +23,8 @@ const foodieSchema = new Schema({
       },
       favorites: [
         {
-          type: String,
+        type: ObjectId,
+         ref: 'Recipe',
           trim: true,
         },
       ],

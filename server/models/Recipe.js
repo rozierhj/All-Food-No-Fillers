@@ -7,6 +7,9 @@ const recipeSchema = new Schema({
     type: String,
     required: true,
   },
+  upVotes: {
+    type: Number,
+  },
   ingredients: [{
     type: String,
     required: true,

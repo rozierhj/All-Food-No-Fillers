@@ -1,5 +1,5 @@
 const { signToken, AuthenticationError } = require('../utils/auth');
-const { Recipe, Comment } = require('../models');
+const { Recipe, Comment, Foodie } = require('../models');
 
 const resolvers = {
   Query: {
@@ -14,6 +14,12 @@ const resolvers = {
     },
     comment: async (parent, { id }) => {
       return Comment.findById(id).populate('recipe');
+    },
+    foodies: async () => {
+        return Foodie.find().populate('comments').populate('favorites');
+    },
+    foodie: async (parent, { id }) => {
+        return Foodie.findById(id).populate('comments').populate('favorites');
     },
   },
 };

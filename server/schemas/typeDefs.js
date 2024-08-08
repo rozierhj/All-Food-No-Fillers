@@ -4,11 +4,12 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
   type Query {
     foodies: [Foodie]
-    foodie(id: ID!): [Foodie]
+    foodie(id: ID!): Foodie
     recipes: [Recipe]
     recipe(id: ID!): Recipe
     comments: [Comment]
     comment(id: ID!): Comment
+    currentFoodie: Foodie
   }
 
     type Foodie {
@@ -18,6 +19,11 @@ const typeDefs = gql`
     password: String
     favorites: [Recipe]
     comments: [Comment]
+  }
+
+    type Auth {
+    token: ID!
+    foodie: Foodie
   }
 
   type Recipe {
@@ -33,6 +39,11 @@ const typeDefs = gql`
     username: String
     recipe: Recipe
     text: String
+  }
+
+  type Mutation {
+    addFoodie(username: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
   }
 `;
 

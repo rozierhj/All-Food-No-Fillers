@@ -27,6 +27,44 @@ const resolvers = {
     foodie: async (parent, { id }) => {
         return Foodie.findById(id).populate('comments').populate('favorites');
     },
+    currentFoodie: async (parent, args, context) => {
+      if (context.user) {
+        return Foodie.findOne({ _id: context.user._id });
+      }
+      throw AuthenticationError;
+    },
+  },
+
+  Mutation: {
+    addFoodie: async (parent, { username, email, password }) => {
+      const foodie = await Foodie.create({ username, email, password });
+      const token = signToken(foodie);
+
+      return { token, foodie };
+    },
+    login: async (parent, { email, password }) => {
+      const foodie = await Foodie.findOne({ email });
+
+      if (!foodie) {
+        throw AuthenticationError;
+      }
+
+      const correctPw = await profile.isCorrectPassword(password);
+
+      if (!correctPw) {
+        throw AuthenticationError;
+      }
+
+      const token = signToken(foodie);
+      return { token, foodie };
+    },
+    // removeFoodie: async (parent, args, context) => {
+    //   if (context.user) {
+    //     return Profile.findOneAndDelete({ _id: context.user._id });
+    //   }
+    //   throw AuthenticationError;
+    // },
+
   },
 };
 

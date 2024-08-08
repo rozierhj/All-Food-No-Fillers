@@ -5,16 +5,13 @@ const Recipe = require('./Recipe');
 const commentSchema = new Schema({
   username: {
     type: String,
-    required: true,
   },
   recipe: {
     type: ObjectId,
     ref: 'Recipe',
-    required: true,
   },
   text: {
     type: String,
-    required: true,
   },
 });
 

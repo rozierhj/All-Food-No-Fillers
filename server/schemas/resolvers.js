@@ -4,10 +4,16 @@ const { Recipe, Comment, Foodie } = require('../models');
 const resolvers = {
   Query: {
     recipes: async () => {
-      return Recipe.find().populate('comments');
+      return Recipe.find().populate('comments').populate({
+        path:'comments',
+        populate: 'recipe'
+      });
     },
     recipe: async (parent, { id }) => {
-      return Recipe.findById(id).populate('comments');
+      return Recipe.findById(id).populate('comments').populate({
+        path:'comments',
+        populate: 'recipe'
+      });
     },
     comments: async () => {
       return Comment.find().populate('recipe');

@@ -5,18 +5,18 @@ const Comment = require('./Comment');
 const recipeSchema = new Schema({
   title: {
     type: String,
-    required: true,
   },
   upVotes: {
     type: Number,
   },
+  apiID: {
+    type: Number,
+  },
   ingredients: [{
     type: String,
-    required: true,
   }],
   instructions: {
     type: String,
-    required: true,
   },
   comments: [{
     type: ObjectId,

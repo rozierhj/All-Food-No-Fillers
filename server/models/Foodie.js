@@ -25,7 +25,6 @@ const foodieSchema = new Schema({
         {
         type: ObjectId,
          ref: 'Recipe',
-          trim: true,
         },
       ],
       comments:[

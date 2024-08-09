@@ -43,8 +43,7 @@ const Foodie = () => {
   return (
     <div>
       <h2 className="card-header">
-        {foodieId ? `${foodie.username}'s` : 'Your'} friends have endorsed these
-        skills...
+        Maybe we'll put the recipies here
       </h2>
     </div>
   );

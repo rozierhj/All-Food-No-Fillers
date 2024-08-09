@@ -49,7 +49,7 @@ const resolvers = {
         throw AuthenticationError;
       }
 
-      const correctPw = await profile.isCorrectPassword(password);
+      const correctPw = await foodie.isCorrectPassword(password);
 
       if (!correctPw) {
         throw AuthenticationError;

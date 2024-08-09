@@ -12,16 +12,6 @@ export const ADD_FOODIE = gql`
   }
 `;
 
-// export const ADD_SKILL = gql`
-//   mutation addSkill($foodieId: ID!, $skill: String!) {
-//     addSkill(profileId: $profileId, skill: $skill) {
-//       _id
-//       name
-//       skills
-//     }
-//   }
-// `;
-
 export const LOGIN_FOODIE = gql`
   mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -33,13 +23,3 @@ export const LOGIN_FOODIE = gql`
     }
   }
 `;
-
-// export const REMOVE_SKILL = gql`
-//   mutation removeSkill($skill: String!) {
-//     removeSkill(skill: $skill) {
-//       _id
-//       name
-//       skills
-//     }
-//   }
-// `;

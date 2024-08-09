@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN_FOODIE } from '../utils/mutations';
+import './LoginPage.css';
 
 import Auth from '../utils/auth';
 
@@ -25,11 +26,13 @@ const Login = (props) => {
     console.log(formState);
     try {
       const { data } = await login({
-        variables: { ...formState },
+        variables: { ...formState },  
       });
-
+      console.log(data);
+      alert(data.login.token);
       Auth.login(data.login.token);
     } catch (e) {
+      alert('big bad error');
       console.error(e);
     }
 

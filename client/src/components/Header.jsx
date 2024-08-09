@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import Auth from '../utils/auth';
+import './Header.css';
 
 const Header = () => {
   const logout = (event) => {
@@ -12,16 +13,13 @@ const Header = () => {
       <div className="container flex-column justify-space-between-lg justify-center align-center text-center">
         <Link className="text-dark" to="/">
           <h1 className="m-0" style={{ fontSize: '3rem' }}>
-            Tech Friends
+            All Food No Filler
           </h1>
         </Link>
-        <p className="m-0" style={{ fontSize: '1.75rem', fontWeight: '700' }}>
-          Meet your new programming pals.
-        </p>
         <div>
           {Auth.loggedIn() ? (
             <>
-              <Link className="btn btn-lg btn-primary m-2" to="/me">
+              <Link className="btn btn-lg btn-primary m-2" to="/currentFoodie">
                 View My Profile
               </Link>
               <button className="btn btn-lg btn-light m-2" onClick={logout}>

@@ -1,30 +1,30 @@
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client";
 
 // import { REMOVE_SKILL } from '../utils/mutations';
 // import { QUERY_ME } from '../utils/queries';
 
 const SkillsList = ({ skills, isLoggedInUser = false }) => {
-//   const [removeSkill, { error }] = useMutation
-//   (REMOVE_SKILL, {
-//     refetchQueries: [
-//       QUERY_ME,
-//       'me'
-//     ]
-//   });
+  //   const [removeSkill, { error }] = useMutation
+  //   (REMOVE_SKILL, {
+  //     refetchQueries: [
+  //       QUERY_ME,
+  //       'me'
+  //     ]
+  //   });
 
-//   const handleRemoveSkill = async (skill) => {
-//     try {
-//       const { data } = await removeSkill({
-//         variables: { skill },
-//       });
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
+  //   const handleRemoveSkill = async (skill) => {
+  //     try {
+  //       const { data } = await removeSkill({
+  //         variables: { skill },
+  //       });
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
 
-//   if (!skills.length) {
-//     return <h3>No Skills Yet</h3>;
-//   }
+  //   if (!skills.length) {
+  //     return <h3>No Skills Yet</h3>;
+  //   }
 
   return (
     <div>

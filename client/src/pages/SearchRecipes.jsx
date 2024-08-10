@@ -13,7 +13,7 @@ import {useMutation, useLazyQuery} from '@apollo/client';
 import {GET_ME} from '../utils/queries';
 import { SAVE_RECIPE } from '../utils/mutations';
 const URL = "https://api.spoonacular.com/recipes/complexSearch";
-const API_KEY= "6804073a8ac745e0a62c724fd05dad12";
+const API_KEY= "cdc727804129496c8ed7564453c15133";
 
 const SearchRecipes = () => {
   // create state for holding returned google api data

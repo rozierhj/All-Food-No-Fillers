@@ -42,11 +42,11 @@ const resolvers = {
     },
 
     // Save a book to the user's savedBooks array
-    saveRecipe: async (parent, {title, recipeId, image }, context) => {
+    saveRecipe: async (parent, {recipeId, title, image }, context) => {
       if (context.foodie) {
         const updatedFoodie = await Foodie.findByIdAndUpdate(
           { _id: context.foodie._id },
-          { $addToSet: { savedRecipes: { title, recipeId, image} } },
+          { $addToSet: { savedRecipes: { recipeId, title, image} } },
           { new: true }
         ).populate('savedRecipes');
 

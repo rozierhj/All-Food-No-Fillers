@@ -61,6 +61,9 @@ const SearchRecipes = () => {
     }
   });
 
+
+
+
   // search for books and set state on form submit
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -114,7 +117,7 @@ const SearchRecipes = () => {
 
   // saving a book to our database
   const handleSaveRecipe = async (recipeId) => {
-
+    
     // find the book in `searchedBooks` state by the matching id
     const recipeToSave = searchedRecipes.find((recipe) => recipe.recipeId === recipeId);
 
@@ -125,6 +128,7 @@ const SearchRecipes = () => {
 
     //adding the book to the existing database for that user
     try {
+      alert('run for your lives');
       await saveRecipe({
         variables: { ...recipeToSave },
       });

@@ -5,7 +5,6 @@ const typeDefs = `
     recipeId: Int
     title: String
     image: String
-    
   }
 
   # Define the Foodie type
@@ -25,9 +24,13 @@ const typeDefs = `
 
   # Define the Mutation type for creating and updating foodies
   type Mutation {
+  
     login(email: String!, password: String!): Auth
+
     addFoodie(username: String!, email: String!, password: String!): Auth
-    saveRecipe(title: String, recipeId: Int, image: String): Foodie
+
+    saveRecipe(recipeId: Int, title: String, image: String): Foodie
+
     removeRecipe(recipeId: Int!): Foodie
   }
 

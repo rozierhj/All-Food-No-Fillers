@@ -27,8 +27,8 @@ export const LOGIN_FOODIE = gql`
 `;
 
 export const SAVE_RECIPE = gql`
-  mutation saveRecipe($recipeId: Int!, $image: String, $title: String) {
-    saveRecipe(recipeId: $recipeId, image: $image, title: $title) {
+  mutation saveRecipe($recipeId: Int!, $title: String, $image: String) {
+    saveRecipe(recipeId: $recipeId,  title: $title, image: $image) {
       _id
       username
       email

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Container,
   Col,
@@ -12,14 +12,31 @@ import axios from 'axios';
 import {useMutation, useLazyQuery} from '@apollo/client';
 import {GET_ME} from '../utils/queries';
 import { SAVE_RECIPE } from '../utils/mutations';
+import RecipeCard from '../components/RecipeCard';
+import './SearchRecipes.css';
 const URL = "https://api.spoonacular.com/recipes/complexSearch";
 const API_KEY= "cdc727804129496c8ed7564453c15133";
 
 const SearchRecipes = () => {
   // create state for holding returned google api data
   const [searchedRecipes, setSearchedRecipes] = useState([]);
+  const [showRecipeCard, setShowRecipeCard] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState('');
+
+  useEffect(() => {
+    // Check if 'searchedRecipes' exists in localStorage
+    const storedRecipes = localStorage.getItem('searchedRecipes');
+    
+    if (storedRecipes) {
+      // If it exists, load the stored recipes into the state
+      setSearchedRecipes(JSON.parse(storedRecipes));
+    } else {
+      // If it doesn't exist, initialize it with an empty array in localStorage
+      localStorage.setItem('searchedRecipes', JSON.stringify([]));
+    }
+  }, []);
 
 
   //fetch the logged-in user's data (GET_ME query) when needed.
@@ -81,6 +98,7 @@ const SearchRecipes = () => {
 
       //update searchbook state
       setSearchedRecipes(recipeData);
+      localStorage.setItem('searchedRecipes', JSON.stringify(recipeData));
       //reset searchinput state
       setSearchInput('');
 
@@ -118,6 +136,16 @@ const SearchRecipes = () => {
     }
   };
 
+  const handleShowRecipeCard = (recipe) =>{
+    setSelectedRecipe(recipe);
+    setShowRecipeCard(true);
+  }
+
+  const handleCloseRecipeCard = () =>{
+    setShowRecipeCard(false);
+    setSelectedRecipe(null);
+  }
+
   //loop through all saved books and grab bookid or return empty array
   const savedRecipeIds = meData?.me?.savedRecipes?.map(recipe => recipe.recipeId) || [];
 
@@ -147,7 +175,7 @@ const SearchRecipes = () => {
           </Form>
         </Container>
       </div>
-
+    <div className='recipes'>
       <Container>
         <h2 className='pt-5'>
           {searchedRecipes.length
@@ -155,34 +183,40 @@ const SearchRecipes = () => {
             : 'Start by Searching Recipes'}
         </h2>
         <Row>
-          {searchedRecipes.map((recipe) => {
-            return (
-              <Col md="4" key={recipe.recipeId}>
-                <Card border='dark'>
-                  {recipe.image ? (
-                    <Card.Img src={recipe.image} alt={`The cover for ${recipe.title}`} variant='top' />
-                  ) : null}
-                  <Card.Body>
-                    <Card.Title>{recipe.title}</Card.Title>
-                    <p className='small'>Authors:</p>
-                    <Card.Text>Recipe Description</Card.Text>
-                    {Auth.loggedIn() && (
-                      <Button
-                        disabled={savedRecipeIds?.some((savedRecipeId) => savedRecipeId === recipe.recipeId)}
-                        className='btn-block btn-info'
-                        onClick={() => handleSaveRecipe(recipe.recipeId)}>
-                        {savedRecipeIds?.some((savedRecipeId) => savedRecipeId === recipe.recipeId)
-                          ? 'This recipe is a favorite!'
-                          : 'Save this recipe!'}
-                      </Button>
-                    )}
-                  </Card.Body>
-                </Card>
-              </Col>
-            );
-          })}
+          {searchedRecipes.map((recipe) => (
+            <Col className='oneCard' md="4" key={recipe.recipeId}>
+              <Card border='dark'>
+                {recipe.image && (
+                  <Card.Img src={recipe.image} alt={`The cover for ${recipe.title}`} variant='top' />
+                )}
+                <Card.Body>
+                  <Card.Title>{recipe.title}</Card.Title>
+                  <Card.Text>Recipe Description</Card.Text>
+                  <Button variant="primary" onClick={() => handleShowRecipeCard(recipe)}>
+                    View Details
+                  </Button>
+                  {Auth.loggedIn() && (
+                    <Button
+                      disabled={savedRecipeIds?.some((savedRecipeId) => savedRecipeId === recipe.recipeId)}
+                      className='btn-block btn-info mt-2'
+                      onClick={() => handleSaveRecipe(recipe.recipeId)}>
+                      {savedRecipeIds?.some((savedRecipeId) => savedRecipeId === recipe.recipeId)
+                        ? 'This recipe is a favorite!'
+                        : 'Save this recipe!'}
+                    </Button>
+                  )}
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
         </Row>
       </Container>
+          </div>
+          <RecipeCard
+            show={showRecipeCard}
+            handleClose={handleCloseRecipeCard}
+            recipe={selectedRecipe}
+          />
     </>
   );
 };

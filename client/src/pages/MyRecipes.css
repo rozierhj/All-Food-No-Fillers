@@ -42,7 +42,8 @@
   
   /* allign buttons vertially on card */
   .recipes .card-body .btn {
-    margin-top: auto;
+    margin-top: 5px !important;
+    margin-bottom: 5px;
   }
   
   /* Add margin to each row to give some spacing between cards */

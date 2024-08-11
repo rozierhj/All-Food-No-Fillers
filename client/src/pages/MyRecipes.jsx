@@ -19,6 +19,8 @@ const SavedRecipes = () => {
 
   //getting use data query
   const {loading, data } = useQuery(GET_ME);
+  const [showRecipeCard, setShowRecipeCard] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   //removing user book mutation
   const [removeRecipe] = useMutation(REMOVE_RECIPE, {
@@ -64,18 +66,17 @@ const SavedRecipes = () => {
 
   //getting users data
   const foodieData = data?.me || {};
-
-
-  const handleShowRecipeCard = (recipe) => {
+  
+  const handleShowRecipeCard = (recipe) =>{
     setSelectedRecipe(recipe);
     setShowRecipeCard(true);
-  };
+  }
 
-  const handleCloseRecipeCard = () => {
+  const handleCloseRecipeCard = () =>{
     setShowRecipeCard(false);
     setSelectedRecipe(null);
-  };
-  
+  }
+
   // if data isn't here yet, say LOADING will test using email which is expected value
   if (foodieData.email === undefined || foodieData.email === null || foodieData.email ==='') {
     return <h2>LOADING...</h2>;
@@ -105,6 +106,9 @@ const SavedRecipes = () => {
                     <Card.Title>{recipe.title}</Card.Title>
                     <p className='small'>Authors: </p>
                     <Card.Text>description</Card.Text>
+                    <Button variant="primary" onClick={() => handleShowRecipeCard(recipe)}>
+                    View Details
+                  </Button>
                     <Button className='btn-block btn-danger' onClick={() => handleDeleteRecipe(recipe.recipeId)}>
                       Delete this Book!
                     </Button>
@@ -115,15 +119,13 @@ const SavedRecipes = () => {
           })}
         </Row>
       </Container>
-      {selectedRecipe && (
-        <RecipeCard
-          show={showRecipeCard}
-          handleClose={handleCloseRecipeCard}
-          recipe={selectedRecipe}
-        />
-      )}
-
+      <RecipeCard
+            show={showRecipeCard}
+            handleClose={handleCloseRecipeCard}
+            recipe={selectedRecipe}
+          />
     </div>
+
   );
 
 };

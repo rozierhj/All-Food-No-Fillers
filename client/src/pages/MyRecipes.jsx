@@ -9,7 +9,10 @@ import {
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_ME } from '../utils/queries';
 import { REMOVE_RECIPE } from '../utils/mutations';
+import { useState } from 'react';
 import Auth from '../utils/auth';
+import RecipeCard from '../components/RecipeCard';
+import './MyRecipes.css';
 
 
 const SavedRecipes = () => {
@@ -61,6 +64,17 @@ const SavedRecipes = () => {
 
   //getting users data
   const foodieData = data?.me || {};
+
+
+  const handleShowRecipeCard = (recipe) => {
+    setSelectedRecipe(recipe);
+    setShowRecipeCard(true);
+  };
+
+  const handleCloseRecipeCard = () => {
+    setShowRecipeCard(false);
+    setSelectedRecipe(null);
+  };
   
   // if data isn't here yet, say LOADING will test using email which is expected value
   if (foodieData.email === undefined || foodieData.email === null || foodieData.email ==='') {
@@ -75,7 +89,7 @@ const SavedRecipes = () => {
           <h1>Viewing saved books!</h1>
         </Container>
       </div>
-      <Container>
+      <Container className='recipes'>
         <h2 className='pt-5'>
           {foodieData.recipeCount
             ? `Viewing ${foodieData.recipeCount} saved ${foodieData.recipeCount === 1 ? 'book' : 'books'}:`
@@ -101,6 +115,13 @@ const SavedRecipes = () => {
           })}
         </Row>
       </Container>
+      {selectedRecipe && (
+        <RecipeCard
+          show={showRecipeCard}
+          handleClose={handleCloseRecipeCard}
+          recipe={selectedRecipe}
+        />
+      )}
 
     </div>
   );

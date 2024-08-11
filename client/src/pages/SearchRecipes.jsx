@@ -128,7 +128,6 @@ const SearchRecipes = () => {
 
     //adding the book to the existing database for that user
     try {
-      alert('run for your lives');
       await saveRecipe({
         variables: { ...recipeToSave },
       });

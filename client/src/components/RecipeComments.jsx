@@ -36,6 +36,7 @@ const RecipeComments = ({ recipeId }) => {
         Add Comment
       </Button>
     )}
+    {showAddComment && <RecipeComment recipeId={recipeId} />}
     </div>
 
   );

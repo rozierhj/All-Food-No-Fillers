@@ -31,7 +31,9 @@ const RecipeComment = ({recipeId}) => {
         event.preventDefault();
 
     try{
+        console.log(recipeId, username, commentText)
         await addComment({
+            
             variables:{
                 recipeId: recipeId,
                 username: username,

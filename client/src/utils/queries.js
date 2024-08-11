@@ -14,4 +14,16 @@ export const GET_ME = gql`
       }
     }
   }
+
+`;
+
+export const GET_RECIPE_COMMENTS = gql`
+  query RecipeComments($recipeId: Int!) {
+    RecipeComments(recipeId: $recipeId) {
+      _id
+      text
+      username
+      recipeId
+    }
+  }
 `;

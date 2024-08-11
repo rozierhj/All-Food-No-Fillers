@@ -1,4 +1,5 @@
 const { Foodie } = require('../models');
+const { Comment } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
 
@@ -11,6 +12,9 @@ const resolvers = {
         return Foodie.findOne({ _id: context.foodie._id }).populate('savedRecipes');
       }
       throw new AuthenticationError('You must be logged in!');
+    },
+    RecipeComments: async (parent, { recipeId }) => {
+      return Comment.find({ recipeId });
     },
   },
 

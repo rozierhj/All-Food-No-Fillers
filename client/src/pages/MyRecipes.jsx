@@ -90,17 +90,18 @@ const SavedRecipes = () => {
           <h1>Viewing saved books!</h1>
         </Container>
       </div>
-      <Container className='recipes'>
+      <Container>
         <h2 className='pt-5'>
           {foodieData.recipeCount
             ? `Viewing ${foodieData.recipeCount} saved ${foodieData.recipeCount === 1 ? 'book' : 'books'}:`
             : 'You have no saved books!'}
         </h2>
+        <div  className='recipes'>
         <Row>
           {foodieData.savedRecipes.map((recipe) => {
             return (
-              <Col md="4">
-                <Card key={recipe.recipeId} border='dark'>
+              <Col md="4" className = 'oneCard'>
+                <Card key={recipe.recipeId} border='dark' >
                   {recipe.image ? <Card.Img src={recipe.image} alt={`The cover for ${recipe.title}`} variant='top' /> : null}
                   <Card.Body>
                     <Card.Title>{recipe.title}</Card.Title>
@@ -118,6 +119,7 @@ const SavedRecipes = () => {
             );
           })}
         </Row>
+        </div>
       </Container>
       <RecipeCard
             show={showRecipeCard}

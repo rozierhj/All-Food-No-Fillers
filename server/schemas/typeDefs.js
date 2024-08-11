@@ -22,9 +22,21 @@ const typeDefs = `
     me: Foodie
   }
 
+  #Define Comment type
+  type Comment {
+  _id: ID
+  text: String
+  username: String
+  recipeId: Int
+}
+
+extend type Query {
+  RecipeComments(recipeId: Int!): [Comment]
+}
+
   # Define the Mutation type for creating and updating foodies
   type Mutation {
-  
+
     login(email: String!, password: String!): Auth
 
     addFoodie(username: String!, email: String!, password: String!): Auth

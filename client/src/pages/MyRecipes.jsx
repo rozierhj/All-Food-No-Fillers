@@ -14,7 +14,6 @@ import Auth from '../utils/auth';
 import RecipeCard from '../components/RecipeCard';
 import './MyRecipes.css';
 
-
 const SavedRecipes = () => {
 
   //getting use data query
@@ -87,15 +86,10 @@ const SavedRecipes = () => {
     
       <div fluid className="text-light bg-dark p-5">
         <Container>
-          <h1>Viewing saved books!</h1>
+          <h1>Your Favorites 🧑‍🍳</h1>
         </Container>
       </div>
       <Container>
-        <h2 className='pt-5'>
-          {foodieData.recipeCount
-            ? `Viewing ${foodieData.recipeCount} saved ${foodieData.recipeCount === 1 ? 'book' : 'books'}:`
-            : 'You have no saved books!'}
-        </h2>
         <div  className='recipes'>
         <Row>
           {foodieData.savedRecipes.map((recipe) => {
@@ -111,7 +105,7 @@ const SavedRecipes = () => {
                     View Details
                   </Button>
                     <Button className='btn-block btn-danger' onClick={() => handleDeleteRecipe(recipe.recipeId)}>
-                      Delete this Book!
+                      Remove from Favorites 🤢
                     </Button>
                   </Card.Body>
                 </Card>

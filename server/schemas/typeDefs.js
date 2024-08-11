@@ -44,6 +44,8 @@ extend type Query {
     saveRecipe(recipeId: Int, title: String, image: String): Foodie
 
     removeRecipe(recipeId: Int!): Foodie
+
+    addComment(recipeId: Int!, username: String!, text: String!): Comment
   }
 
   # Define the Auth type to handle authentication responses

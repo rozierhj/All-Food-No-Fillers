@@ -61,9 +61,6 @@ const SearchRecipes = () => {
     }
   });
 
-
-
-
   // search for books and set state on form submit
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -180,11 +177,11 @@ const SearchRecipes = () => {
       </div>
     <div className='recipes'>
       <Container>
-        <h2 className='pt-5'>
+        {/* <h2 className='pt-5'>
           {searchedRecipes.length
             ? `Viewing ${searchedRecipes.length} results:`
             : 'Start by Searching Recipes'}
-        </h2>
+        </h2> */}
         <Row>
           {searchedRecipes.map((recipe) => (
             <Col className='oneCard' md="4" key={recipe.recipeId}>

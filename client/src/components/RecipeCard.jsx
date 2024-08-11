@@ -4,6 +4,7 @@ import Auth from '../utils/auth';
 import {GET_ME} from '../utils/queries';
 import {useMutation, useLazyQuery} from '@apollo/client';
 import RecipeComments from './RecipeComments';
+import RecipeComment from './RecipeComment';
 
 
 const RecipeCard = ({ show, handleClose, recipe }) => {
@@ -12,6 +13,7 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
 
   const [getMe, { data: meData }] = useLazyQuery(GET_ME);
   const [showComments, setShowComments] = useState(false);
+  const [showAddComment, setShowAddComment] = useState(false);
 
   useEffect(() => {
     if (Auth.loggedIn()) {
@@ -21,6 +23,13 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
 
   const toggleComments = () => {
     setShowComments(!showComments);
+    setShowAddComment(false);
+  };
+
+  const handleAddCommentClick = () =>{
+
+    setShowAddComment(true);
+
   };
 
   return (
@@ -37,7 +46,13 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
           />
         )}
         <p>Recipe Description for {recipe.title}</p>
-        {/* You can add more detailed information about the recipe here */}
+        {showComments && <RecipeComments recipeId={recipe.recipeId} />}
+        {showComments && Auth.loggedIn() && !showAddComment && (
+          <Button variant="primary" onClick={handleAddCommentClick} className="mt-3">
+            Add Comment
+            </Button>
+        )}
+        {showAddComment && <RecipeComment recipeId={recipe.recipeId}/>}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

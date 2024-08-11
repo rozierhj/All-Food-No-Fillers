@@ -55,3 +55,20 @@ export const REMOVE_RECIPE = gql`
     }
   }
 `;
+
+export const ADD_COMMENT = gql`
+
+mutation addComment($recipeid: Int!, $username: String! $text: String!){
+  addComment(recipeid:  $recipeId, username: $username, text: $text){
+  
+    _id
+  text
+  username
+  recipeId
+  
+  }
+}
+
+`;
+
+

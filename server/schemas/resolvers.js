@@ -72,6 +72,18 @@ const resolvers = {
       }
       throw new AuthenticationError('You must be logged in!');
     },
+
+    addComment: async (parent, {recipeId, username, text}, context) =>{
+      if(context.foodie){
+        const newComment = await Comment.create({
+          text,
+          username,
+          recipeId,
+        });
+        return newComment;
+      }
+      throw new AuthenticationError('You must be logged in to add a comment');
+    },
   },
 };
 

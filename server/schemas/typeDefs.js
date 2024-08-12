@@ -30,6 +30,14 @@ const typeDefs = `
   recipeId: Int
 }
 
+ #define the Reaction type
+ type Reaction {
+ _id: ID
+ recipeId: Int,
+ upVotes: Int,
+ comments: [Comment]
+ }
+
 extend type Query {
   RecipeComments(recipeId: Int!): [Comment]
 }
@@ -46,6 +54,10 @@ extend type Query {
     removeRecipe(recipeId: Int!): Foodie
 
     addComment(recipeId: Int!, username: String!, text: String!): Comment
+
+    upvoteRecipe {
+     upvoteRecipe(recipeId: Int!): Reaction
+    }
   }
 
   # Define the Auth type to handle authentication responses

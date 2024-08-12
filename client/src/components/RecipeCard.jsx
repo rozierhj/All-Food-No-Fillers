@@ -5,6 +5,7 @@ import {GET_ME} from '../utils/queries';
 import {useMutation, useLazyQuery} from '@apollo/client';
 import RecipeComments from './RecipeComments';
 import RecipeComment from './RecipeComment';
+import {UPVOTE} from '../utils/mutations';
 
 
 const RecipeCard = ({ show, handleClose, recipe }) => {
@@ -14,6 +15,9 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
   const [getMe, { data: meData }] = useLazyQuery(GET_ME);
   const [showComments, setShowComments] = useState(false);
   const [showAddComment, setShowAddComment] = useState(false);
+  const [upvoted, setUpvoted] = useState(false);
+  const [upvoteRecipe] = useMutation(UPVOTE);
+
 
   useEffect(() => {
     if (Auth.loggedIn()) {
@@ -30,6 +34,20 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
 
     setShowAddComment(true);
 
+  };
+
+  const handleUpvote = async () => {
+    if(Auth.loggedIn() && !upvoted){
+      try{
+        await upvoteRecipe({
+          variables:{recipeId: recipe.recipeId},
+        });
+        setUpvoted(true);
+      } 
+      catch(err){
+        console.log('this was done in error', err);
+      }
+    }
   };
 
   return (

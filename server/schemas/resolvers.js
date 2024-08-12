@@ -84,6 +84,28 @@ const resolvers = {
       }
       throw new AuthenticationError('You must be logged in to add a comment');
     },
+
+    upVote: async (parent, {recipeId}, context) => {
+      if(!context.foodie){
+        throw new AuthenticationError('You need to log in');
+      }
+
+      let reaction = await Reaction.findOne({recipeId});
+
+      if(reaction){
+        reaction.upVotes += 1;
+      }
+      else{
+        reaction = await Reaction.create({
+          recipeId,
+          upVotes: 1,
+          comments: [],
+        });
+      }
+
+      await reaction.save();
+      return reaction;
+    },
   },
 };
 

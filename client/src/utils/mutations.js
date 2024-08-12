@@ -61,12 +61,25 @@ export const ADD_COMMENT = gql`
 mutation addComment($recipeid: Int!, $username: String! $text: String!){
   addComment(recipeid:  $recipeId, username: $username, text: $text){
   
-    _id
+  _id
   text
   username
   recipeId
   
   }
+}
+
+`;
+
+export const UPVOTE = gql`
+
+mutation upvoteRecipe($recipeId: Int!){
+  upvoteRecipe(recipeId: $recipeId){
+    _id
+    recipeId
+    upVotes
+  }
+
 }
 
 `;

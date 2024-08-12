@@ -1,5 +1,5 @@
 const typeDefs = `
-  # Define the Recipe type based on the recipeSchema
+  # Define the Recipe type
   type Recipe {
     _id: ID
     recipeId: Int
@@ -42,7 +42,7 @@ extend type Query {
   RecipeComments(recipeId: Int!): [Comment]
 }
 
-  # Define the Mutation type for creating and updating foodies
+  # Define the Mutation types
   type Mutation {
 
     login(email: String!, password: String!): Auth
@@ -55,9 +55,8 @@ extend type Query {
 
     addComment(recipeId: Int!, username: String!, text: String!): Comment
 
-    upvoteRecipe {
-     upvoteRecipe(recipeId: Int!): Reaction
-    }
+    upvoteRecipe(recipeId: Int!): Reaction
+  
   }
 
   # Define the Auth type to handle authentication responses

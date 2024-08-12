@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-
+//models stores all comments created with data to link them to a username and a recipe id
 const commentSchema = new Schema({
 
     text: {

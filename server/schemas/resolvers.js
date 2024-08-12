@@ -1,5 +1,4 @@
-const { Foodie } = require('../models');
-const { Comment } = require('../models');
+const { Foodie, Comment, Reactions } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
 
@@ -8,11 +7,16 @@ const resolvers = {
 
     // Get the currently authenticated user
     me: async (parent, args, context) => {
+
       if (context.foodie) {
+
+        //show users saved recipies
         return Foodie.findOne({ _id: context.foodie._id }).populate('savedRecipes');
       }
       throw new AuthenticationError('You must be logged in!');
     },
+
+    //get the comments from a specific recipe
     RecipeComments: async (parent, { recipeId }) => {
       return Comment.find({ recipeId });
     },
@@ -22,36 +26,44 @@ const resolvers = {
 
     // Add a new user
     addFoodie: async (parent, { username, email, password }) => {
+
+      //data from signup table
       const foodie = await Foodie.create({ username, email, password });
+
+      //the JWT token
       const token = signToken(foodie);
       return { token, foodie };
     },
 
     // Log in a user
     login: async (parent, { email, password }) => {
+
+      //find the user using their email
       const foodie = await Foodie.findOne({ email });
 
       if (!foodie) {
         throw new AuthenticationError('Incorrect credentials');
       }
 
+      //test password
       const correctPw = await foodie.isCorrectPassword(password);
 
       if (!correctPw) {
         throw new AuthenticationError('Incorrect credentials');
       }
 
+      //JWT token for signed in user
       const token = signToken(foodie);
       return { token, foodie };
     },
 
-    // Save a book to the user's savedBooks array
+    // add recipe to users favorited recipes
     saveRecipe: async (parent, {recipeId, title, image }, context) => {
       if (context.foodie) {
         const updatedFoodie = await Foodie.findByIdAndUpdate(
-          { _id: context.foodie._id },
-          { $addToSet: { savedRecipes: { recipeId, title, image} } },
-          { new: true }
+          { _id: context.foodie._id },//find user with id
+          { $addToSet: { savedRecipes: { recipeId, title, image} } },//add data as object to recipes array
+          { new: true }//update the document
         ).populate('savedRecipes');
 
         return updatedFoodie;
@@ -59,13 +71,14 @@ const resolvers = {
       throw new AuthenticationError('You must be logged in!');
     },
 
-    // Remove a book from the user's savedBooks array
+    // Remove a favorited recipe
     removeRecipe: async (parent, { recipeId }, context) => {
       if (context.foodie) {
+        //find the foodie by their id
         const updatedFoodie = await Foodie.findByIdAndUpdate(
           { _id: context.foodie._id },
-          { $pull: { savedRecipes: { recipeId } } },
-          { new: true }
+          { $pull: { savedRecipes: { recipeId } } },//pull the recipe from the foodies favorited recipes
+          { new: true }//update document
         ).populate('savedRecipes');
 
         return updatedFoodie;
@@ -73,8 +86,10 @@ const resolvers = {
       throw new AuthenticationError('You must be logged in!');
     },
 
+    //add a comment to a recipe
     addComment: async (parent, {recipeId, username, text}, context) =>{
       if(context.foodie){
+        //create comment, must provide comment text, users username and the id of the recipe they are commenting on
         const newComment = await Comment.create({
           text,
           username,
@@ -85,18 +100,22 @@ const resolvers = {
       throw new AuthenticationError('You must be logged in to add a comment');
     },
 
+    //add an upvote to a recipe
     upVote: async (parent, {recipeId}, context) => {
       if(!context.foodie){
         throw new AuthenticationError('You need to log in');
       }
 
-      let reaction = await Reaction.findOne({recipeId});
+      //test if the recipe is in the reactions collection
+      let reaction = await Reactions.findOne({recipeId});
 
+      //if recipe is in the reactions collection then increase its upvotes by one
       if(reaction){
         reaction.upVotes += 1;
       }
       else{
-        reaction = await Reaction.create({
+        //if recipe was not in reactions collection then add it to the collection and set its upvotes to one
+        reaction = await Reactions.create({
           recipeId,
           upVotes: 1,
           comments: [],

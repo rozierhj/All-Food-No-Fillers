@@ -7,13 +7,13 @@
     /* margin: 5px; */
   }
   
-  /* Ensure images fit within their container */
+  
   .recipes .card-img-top {
     height: 180px;
-    object-fit: cover;
+    object-fit: cover; /* images fit within their container */
   }
   
-  /* Ensure the card body takes up available space */
+  /* card body takes up available space */
   .recipes .card-body {
     flex: 1;
     display: flex;
@@ -21,22 +21,22 @@
     justify-content: space-between;
   }
   
-  /* Truncate the title if it overflows */
+  
   .recipes .card-title {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 5px;
     white-space: nowrap;
-    overflow: hidden;
+    overflow: hidden; /* Truncate the title if it overflows */
     text-overflow: ellipsis;
   }
   
-  /* Truncate recipe descriptions if they overflow */
+ 
  .recipes .card-text {
     flex: 1;
     margin-bottom: 5px;
     white-space: nowrap;
-    overflow: hidden;
+    overflow: hidden;  /* Truncate recipe descriptions if they overflow */
     text-overflow: ellipsis;
   }
   
@@ -51,6 +51,7 @@
     margin-bottom: 50px;
   }
 
+  /* Add margin to each row to give some spacing between cards */
   .recipes .oneCard{
     margin-bottom: 10px;
   }

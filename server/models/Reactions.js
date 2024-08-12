@@ -1,4 +1,5 @@
 const {Schema, model} = require('mongoose');
+//model to hold data for any upvotes or comments done on a recipe
 
 const reactionSchema = new Schema({
 

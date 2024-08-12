@@ -18,10 +18,15 @@ const URL = "https://api.spoonacular.com/recipes/complexSearch";
 const API_KEY= "cdc727804129496c8ed7564453c15133";
 
 const SearchRecipes = () => {
-  // create state for holding returned google api data
+  // state holds recipes from the api after the search
   const [searchedRecipes, setSearchedRecipes] = useState([]);
+
+  //state controls whether or not the modal with the individual recipecard can be seen
   const [showRecipeCard, setShowRecipeCard] = useState(false);
+
+  //state holds the recipe data that will be on the recipecard
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState('');
 
@@ -42,21 +47,23 @@ const SearchRecipes = () => {
   //fetch the logged-in user's data (GET_ME query) when needed.
  const [getMe, {data: meData}] = useLazyQuery(GET_ME);
 
- //save a book to the user's savedBooks list using the SAVE_BOOK mutation.
+ //save a recipe 
   const [saveRecipe] = useMutation(SAVE_RECIPE,{
 
-    //update the Apollo Client cache with the users new saved book
+    //update the Apollo Client cache with the users new saved recipe
     update(cache, {data: {saveRecipe}}) {
       try{
+        //get user data from the cache
           const {me} = cache.readQuery({query: GET_ME});
 
+          //update the cache with the new saved recipe
           cache.writeQuery({
             query:GET_ME,
             data: {me: {...me, savedRecipes:[...me.savedRecipes, saveRecipe]}},
           });
       }
       catch(err){
-        console.log('error in updating the cache after saving the book', err)
+        console.log('error in updating the cache after saving the recipe', err)
       }
     }
   });
@@ -70,34 +77,32 @@ const SearchRecipes = () => {
     }
 
     try {
-      //the google book api that is getting value from book search field
-      // const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchInput}`);
+      //spoonacular api where we get our recipes
       const response = await axios.get('https://api.spoonacular.com/recipes/complexSearch', {
         params: {
-          query: searchInput, // The name of the recipe to search for
-          number: 5, // Limit the results to 5
-          apiKey: `${API_KEY}`, // Replace with your Spoonacular API key
+          query: searchInput,
+          number: 5, //number of recipes being returned
+          apiKey: `${API_KEY}`,
         },
       });
       console.log(response);
       if (!response) {
         throw new Error('something went wrong!');
       }
-
+      //use keys from api return to retrieve an array of recipe objects
       const  items  = response.data.results;
       console.log(items);
-      //get the data from the books returned in the google book api
+      //go through results recipe array and pull required values
       const recipeData = items.map((recipe) => ({
         recipeId: recipe.id,
-        // authors: book.volumeInfo.authors || ['No author to display'],
         title: recipe.title,
-        // description: book.volumeInfo.description,
         image: recipe.image || '',
-        // link: book.accessInfo.webReaderLink,
       }));
 
-      //update searchbook state
+      //update searchedRecipes state with the new recipe data
       setSearchedRecipes(recipeData);
+
+      //store recipe in local storage so we can get them to persist if user refreshes the page
       localStorage.setItem('searchedRecipes', JSON.stringify(recipeData));
       //reset searchinput state
       setSearchInput('');
@@ -112,10 +117,10 @@ const SearchRecipes = () => {
     }
   };
 
-  // saving a book to our database
+  // saving a recipe to the users saved recipe array
   const handleSaveRecipe = async (recipeId) => {
     
-    // find the book in `searchedBooks` state by the matching id
+    // find the recipe in `searchedRecipes` state by the matching id
     const recipeToSave = searchedRecipes.find((recipe) => recipe.recipeId === recipeId);
 
     //if use not authentice then leave
@@ -123,35 +128,42 @@ const SearchRecipes = () => {
       return false;
     }
 
-    //adding the book to the existing database for that user
+    //adding the recipe to the existing database for that user
     try {
       await saveRecipe({
         variables: { ...recipeToSave },
       });
 
-      // Fetch updated user data after saving the book
+      // Fetch updated user data after saving the recipe
       getMe();
     } catch (err) {
       console.error('Error saving the recipe!', err);
     }
   };
 
+  //function for showing a selected recipe via the recipeCard modal
   const handleShowRecipeCard = (recipe) =>{
+    //get the redipe data
     setSelectedRecipe(recipe);
+    //show the RecipeCard modal
     setShowRecipeCard(true);
   }
 
+  //function for closing the recipe card
   const handleCloseRecipeCard = () =>{
+    //hide the RecipeCard modal
     setShowRecipeCard(false);
+    //clear the recipe card state data
     setSelectedRecipe(null);
   }
 
-  //loop through all saved books and grab bookid or return empty array
+  //loop through all saved recipes and grab recpieId or return empty array
   const savedRecipeIds = meData?.me?.savedRecipes?.map(recipe => recipe.recipeId) || [];
 
   return (
     <>
       <div className="text-light bg-dark p-5">
+        {/* container for the page header */}
         <Container>
           <h1>Find Delicious Recipes!</h1>
           <Form onSubmit={handleFormSubmit}>
@@ -176,12 +188,8 @@ const SearchRecipes = () => {
         </Container>
       </div>
     <div className='recipes'>
+      {/* container for the recipe search results */}
       <Container>
-        {/* <h2 className='pt-5'>
-          {searchedRecipes.length
-            ? `Viewing ${searchedRecipes.length} results:`
-            : 'Start by Searching Recipes'}
-        </h2> */}
         <Row>
           {searchedRecipes.map((recipe) => (
             <Col className='oneCard' md="4" key={recipe.recipeId}>
@@ -192,9 +200,11 @@ const SearchRecipes = () => {
                 <Card.Body>
                   <Card.Title>{recipe.title}</Card.Title>
                   <Card.Text>Recipe Description</Card.Text>
+                  {/* button controls if user can see RecipeCard with data specific to that recipe */}
                   <Button variant="primary" onClick={() => handleShowRecipeCard(recipe)}>
                     View Details
                   </Button>
+                  {/* show this button only is a user is signed in */}
                   {Auth.loggedIn() && (
                     <Button
                       disabled={savedRecipeIds?.some((savedRecipeId) => savedRecipeId === recipe.recipeId)}
@@ -212,6 +222,7 @@ const SearchRecipes = () => {
         </Row>
       </Container>
           </div>
+          {/* modal for a single recipe that is selected by the user */}
           <RecipeCard
             show={showRecipeCard}
             handleClose={handleCloseRecipeCard}

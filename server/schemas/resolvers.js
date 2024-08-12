@@ -101,7 +101,7 @@ const resolvers = {
     },
 
     //add an upvote to a recipe
-    upVote: async (parent, {recipeId}, context) => {
+    upvoteRecipe: async (parent, {recipeId}, context) => {
       if(!context.foodie){
         throw new AuthenticationError('You need to log in');
       }

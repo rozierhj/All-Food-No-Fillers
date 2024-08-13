@@ -7,6 +7,16 @@ import RecipeComments from './RecipeComments';
 import RecipeComment from './RecipeComment';
 import {UPVOTE} from '../utils/mutations';
 
+const URL=`https://api.spoonacular.com/recipes/${recipeId}/information`
+const API_KEY= "cdc727804129496c8ed7564453c15133";
+useEffect(() => {
+  async function fetchRecipe() {
+   const res= await fetch(`${URL}?apiKey=${API_KEY}`);
+   const data= res.json();
+   console.log(data);
+  }
+  fetchRecipe()
+}, [])
 
 const RecipeCard = ({ show, handleClose, recipe }) => {
 
@@ -80,6 +90,7 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
           />
         )}
         <p>Recipe Description for {recipe.title}</p>
+        <p>{recipe.recipeId}</p>
         {/* render comments when showComments is true when user selects details button */}
         {showComments && <RecipeComments recipeId={recipe.recipeId} />}
         {/* render the add comment button if the comments are visible and the user is logged in */}

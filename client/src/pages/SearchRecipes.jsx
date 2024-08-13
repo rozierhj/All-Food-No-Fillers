@@ -20,6 +20,7 @@ const API_KEY= "cdc727804129496c8ed7564453c15133";
 const SearchRecipes = () => {
   // state holds recipes from the api after the search
   const [searchedRecipes, setSearchedRecipes] = useState([]);
+  // CTD set state for details
 
   //state controls whether or not the modal with the individual recipecard can be seen
   const [showRecipeCard, setShowRecipeCard] = useState(false);
@@ -91,13 +92,16 @@ const SearchRecipes = () => {
       }
       //use keys from api return to retrieve an array of recipe objects
       const  items  = response.data.results;
+      const details =response.
       console.log(items);
       //go through results recipe array and pull required values
       const recipeData = items.map((recipe) => ({
         recipeId: recipe.id,
         title: recipe.title,
         image: recipe.image || '',
+        // detail:  ,
       }));
+      // CTD loop through recipe data set 
 
       //update searchedRecipes state with the new recipe data
       setSearchedRecipes(recipeData);
@@ -199,7 +203,7 @@ const SearchRecipes = () => {
                 )}
                 <Card.Body>
                   <Card.Title>{recipe.title}</Card.Title>
-                  <Card.Text>Recipe Description</Card.Text>
+                  <Card.Text>Details</Card.Text>
                   {/* button controls if user can see RecipeCard with data specific to that recipe */}
                   <Button variant="primary" onClick={() => handleShowRecipeCard(recipe)}>
                     View Details

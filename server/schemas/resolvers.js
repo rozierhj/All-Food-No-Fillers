@@ -1,4 +1,4 @@
-const { Foodie, Comment, Reactions } = require('../models');
+const { Foodie, Comment, Reaction } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
 
@@ -20,6 +20,11 @@ const resolvers = {
     RecipeComments: async (parent, { recipeId }) => {
       return Comment.find({ recipeId });
     },
+
+    getWelcomeVideo: async () => {
+      const videoUrl = '/assets/welcome.mp4';
+      return videoUrl;
+    }
   },
 
   Mutation: {
@@ -95,11 +100,36 @@ const resolvers = {
           username,
           recipeId,
         });
-        return newComment;
+
+        let reaction = await Reaction.findOne({recipeId});
+
+        if(reaction){
+          await resolvers.Mutation.updateReaction(parent,{reactionId: reaction._id, commentId: newComment._id})
+        }
+        else{
+          await resolvers.Mutation.addReaction(parent,{recipeId: recipeId, commentId: newComment._id})
+        }
+        
+       return newComment;
+
       }
       throw new AuthenticationError('You must be logged in to add a comment');
     },
 
+    addReaction: async(parent,{recipeId, commentId}) =>{
+      const newReaction = await Reaction.create({recipeId:recipeId, comments: [commentId], upVotes: 0 });
+      return newReaction;
+    },
+
+    updateReaction: async(parent, {reactionId, commentId }) =>{
+
+      const updatedReaction = await Reaction.findByIdAndUpdate(reactionId,
+        {$addToSet:{comments:commentId}},
+        {new: true}
+      ).populate('comments');
+      return updatedReaction;
+
+    },
     //add an upvote to a recipe
     upvoteRecipe: async (parent, {recipeId}, context) => {
       if(!context.foodie){
@@ -107,7 +137,7 @@ const resolvers = {
       }
 
       //test if the recipe is in the reactions collection
-      let reaction = await Reactions.findOne({recipeId});
+      let reaction = await Reaction.findOne({recipeId});
 
       //if recipe is in the reactions collection then increase its upvotes by one
       if(reaction){

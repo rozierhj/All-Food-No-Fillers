@@ -83,11 +83,11 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
         {/* render comments when showComments is true when user selects details button */}
         {showComments && <RecipeComments recipeId={recipe.recipeId} />}
         {/* render the add comment button if the comments are visible and the user is logged in */}
-        {showComments && Auth.loggedIn() && !showAddComment && (
+        {/* {showComments && Auth.loggedIn() && !showAddComment && (
           <Button variant="primary" onClick={handleAddCommentClick} className="mt-3">
             Add Comment
             </Button>
-        )}
+        )} */}
         {/* render the new comment for if the user clicks the add comment button */}
         {showAddComment && <RecipeComment recipeId={recipe.recipeId}/>}
       </Modal.Body>

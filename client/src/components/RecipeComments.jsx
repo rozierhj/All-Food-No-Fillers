@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import { GET_RECIPE_COMMENTS } from '../utils/queries';
 import { Spinner, ListGroup, Button } from 'react-bootstrap';
 import RecipeComment from './RecipeComment';
+import Auth from '../utils/auth';
 
 const RecipeComments = ({ recipeId }) => {
   //state controls of the add comment form

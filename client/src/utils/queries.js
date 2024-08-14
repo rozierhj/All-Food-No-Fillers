@@ -18,7 +18,7 @@ export const GET_ME = gql`
 `;
 
 export const GET_RECIPE_COMMENTS = gql`
-  query RecipeComments($recipeId: Int!) {
+  query getRecipeComments($recipeId: Int!) {
     RecipeComments(recipeId: $recipeId) {
       _id
       text
@@ -26,4 +26,10 @@ export const GET_RECIPE_COMMENTS = gql`
       recipeId
     }
   }
+`;
+
+export const GET_WELCOME_VIDEO = gql`
+  query getWelcomeVideo {
+    getWelcomeVideo
+ }
 `;

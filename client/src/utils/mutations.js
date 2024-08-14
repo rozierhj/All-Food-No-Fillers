@@ -58,8 +58,8 @@ export const REMOVE_RECIPE = gql`
 
 export const ADD_COMMENT = gql`
 
-mutation addComment($recipeid: Int!, $username: String! $text: String!){
-  addComment(recipeid:  $recipeId, username: $username, text: $text){
+mutation addComment($recipeId: Int!, $username: String!, $text: String!){
+  addComment(recipeId:  $recipeId, username: $username, text: $text){
   
   _id
   text
@@ -68,6 +68,40 @@ mutation addComment($recipeid: Int!, $username: String! $text: String!){
   
   }
 }
+
+`;
+
+export const ADD_REACTION = gql`
+
+  mutation addReaction($recipeId: Int!, $commentId: ID){
+  addReaction(recipeId: $recipeId, commentId:$commentId){
+    _id
+    recipeId
+    comments{
+      _id
+      text
+      username
+      recipeId
+    }
+  }
+  }
+
+`;
+
+export const UPDATE_REACTION = gql`
+
+  mutation updateReaction($reactionId: ID!, $commentId: ID){
+    updateReaction(reactionId: $reactionId, commentId: $commentId){
+      _id
+      recipeId
+      comments{
+        _id
+        text
+        username
+        recipeId
+      }
+    }
+  }
 
 `;
 

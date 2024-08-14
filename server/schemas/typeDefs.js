@@ -1,4 +1,6 @@
-const typeDefs = `
+const {gql} = require('apollo-server-express');
+
+const typeDefs = gql`
   # Define the Recipe type
   type Recipe {
     _id: ID
@@ -20,6 +22,8 @@ const typeDefs = `
   # Define the Query type
   type Query {
     me: Foodie
+    RecipeComments(recipeId: Int!): [Comment]
+    getWelcomeVideo: String
   }
 
   #Define Comment type
@@ -33,14 +37,10 @@ const typeDefs = `
  #define the Reaction type
  type Reaction {
  _id: ID
- recipeId: Int,
- upVotes: Int,
+ recipeId: Int!
+ upVotes: Int
  comments: [Comment]
  }
-
-extend type Query {
-  RecipeComments(recipeId: Int!): [Comment]
-}
 
   # Define the Mutation types
   type Mutation {
@@ -55,8 +55,12 @@ extend type Query {
 
     addComment(recipeId: Int!, username: String!, text: String!): Comment
 
-    upvoteRecipe(recipeId: Int!): Reaction
-  
+    addReaction(recpeId: Int!, commentId: ID, upVotes: Int): Reaction
+
+    updateReaction(reactionId: ID!, commentId: ID, upVotes: Int): Reaction
+
+    upvoteRecipe(recipeId: Int!, commentId: ID, upVotes: Int): Reaction
+
   }
 
   # Define the Auth type to handle authentication responses

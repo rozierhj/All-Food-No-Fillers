@@ -18,6 +18,6 @@ const commentSchema = new Schema({
 });
 
 
-const Foodie = model('Foodie', commentSchema);
+const Comment = model('Comment', commentSchema);
 
-module.exports = Foodie;
+module.exports = Comment;

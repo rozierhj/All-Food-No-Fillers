@@ -1,4 +1,6 @@
 
 const Foodie = require('./Foodie');
+const Comment = require('./Comment');
+const Reaction = require('./Reaction');
 
-module.exports = { Foodie };
+module.exports = { Foodie, Comment, Reaction };

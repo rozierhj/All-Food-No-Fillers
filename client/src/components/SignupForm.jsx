@@ -3,6 +3,7 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { ADD_FOODIE } from '../utils/mutations';
 import Auth from '../utils/auth';
+import WelcomeVideoModal from './WelcomeVideoModal';
 
 const SignupForm = () => {
   // set initial form state
@@ -11,6 +12,8 @@ const SignupForm = () => {
   const [validated] = useState(false);
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
+
+  const [showVideoModal, setShowVideoModal] = useState(false);
 
   const [addFoodie, { error }] = useMutation(ADD_FOODIE);
 
@@ -36,17 +39,27 @@ const SignupForm = () => {
       });
 
       Auth.login(data.addFoodie.token);
+      setShowVideoModal(true);
+      
     } 
     catch (err) {
       console.error(err);
       setShowAlert(true);
     }
 
-    setFoodieFormData({
-      username: '',
-      email: '',
-      password: '',
-    });
+      
+    setTimeout(() =>{
+      setFoodieFormData({
+        username: '',
+        email: '',
+        password: '',
+      });
+    }, 500);
+
+  };
+
+  const handleCloseVideoModal = () =>{
+    setShowVideoModal(false);
   };
 
   return (
@@ -103,6 +116,8 @@ const SignupForm = () => {
           Submit
         </Button>
       </Form>
+
+      <WelcomeVideoModal show={showVideoModal} handleClose={handleCloseVideoModal} />
     </>
   );
 };

@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {Form, Button} from 'react-bootstrap';
 import {useMutation, useLazyQuery} from '@apollo/client';
-import {ADD_COMMENT} from '../utils/mutations';
+import {ADD_COMMENT, ADD_REACTION, UPDATE_REACTION} from '../utils/mutations';
 import { GET_RECIPE_COMMENTS, GET_ME } from '../utils/queries';
 import Auth from '../utils/auth';
 
@@ -13,12 +13,10 @@ const RecipeComment = ({recipeId}) => {
     //fetch user data
     const [getMe, {data:meData}] = useLazyQuery(GET_ME);
     //mutation to add comment and then refresh comments after adding
-    const [addComment, {error}] = useMutation(ADD_COMMENT, {
-        //only fetch the comments of the recipe that the new comment was added to
-        refetchQueries: [{query: GET_RECIPE_COMMENTS,
-            variables: {recipeId}
-        }],
-    });
+    const [addComment] = useMutation(ADD_COMMENT);
+    const [addReaction] = useMutation(ADD_REACTION);
+    const [updateReaction] = useMutation(UPDATE_REACTION);
+    const [error, setError] = useState(null);
 
     //get user data
     useEffect(()=>{
@@ -38,18 +36,36 @@ const RecipeComment = ({recipeId}) => {
     //function for adding comments
     const handleCommentSubmit = async (event) => {
         event.preventDefault();
+        setError(null);
 
     try{
         console.log(recipeId, username, commentText);
         //mutation for adding a comment is executed
-        await addComment({
-            
+        const {data : commentData} = await addComment({
             variables:{
                 recipeId: recipeId,
                 username: username,
                 text: commentText,
-            }
+            },
         });
+
+        const commentId = commentData.addComment._id;
+
+        const {data : reactionData} = await addReaction({
+            variables: {
+                recipeId: recipeId,
+                commentId: commentId,
+            },
+        });
+
+        if(!reactionData.addReaction){
+            await updateReaction({
+                variables: {
+                    reactionId: reactionData._id,
+                    commentId: commentId,
+                },
+            });
+        }
         setCommentText('');
     }
     catch(err){

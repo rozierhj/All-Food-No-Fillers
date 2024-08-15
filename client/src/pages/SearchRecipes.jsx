@@ -14,12 +14,14 @@ import {GET_ME} from '../utils/queries';
 import { SAVE_RECIPE } from '../utils/mutations';
 import RecipeCard from '../components/RecipeCard';
 import './SearchRecipes.css';
+// import { index } from '../../../server/models/Recipe';
 const URL = "https://api.spoonacular.com/recipes/complexSearch";
 const API_KEY= "cdc727804129496c8ed7564453c15133";
 
 const SearchRecipes = () => {
   // state holds recipes from the api after the search
   const [searchedRecipes, setSearchedRecipes] = useState([]);
+  // CTD set state for details
 
   //state controls whether or not the modal with the individual recipecard can be seen
   const [showRecipeCard, setShowRecipeCard] = useState(false);
@@ -91,13 +93,36 @@ const SearchRecipes = () => {
       }
       //use keys from api return to retrieve an array of recipe objects
       const  items  = response.data.results;
+      
       console.log(items);
       //go through results recipe array and pull required values
       const recipeData = items.map((recipe) => ({
         recipeId: recipe.id,
         title: recipe.title,
         image: recipe.image || '',
+        steps: [],
+        
       }));
+      console.log(recipeData);
+
+      for (let i =0; i < recipeData.length; i++){
+        console.log(recipeData[i].recipeId);
+        const detail= await axios.get
+        (`https://api.spoonacular.com/recipes/${recipeData[i].recipeId}/information`, 
+          {
+              params: {            
+                apiKey: `${API_KEY}`,
+              },
+              });
+              recipeData[i].steps=[...detail.data.analyzedInstructions[0].steps];
+              console.log(recipeData);
+      };
+
+      
+      
+
+     
+      // CTD loop through recipe data set 
 
       //update searchedRecipes state with the new recipe data
       setSearchedRecipes(recipeData);
@@ -199,7 +224,12 @@ const SearchRecipes = () => {
                 )}
                 <Card.Body>
                   <Card.Title>{recipe.title}</Card.Title>
-                  <Card.Text>Recipe Description</Card.Text>
+                  {/* <Card.Text>Steps</Card.Text> */}
+                  {/* <ol>
+                    {recipe.steps.map((step, index)=> ( 
+                      <li key={index}>{step.step}</li>
+                    ))}
+                  </ol> */}
                   {/* button controls if user can see RecipeCard with data specific to that recipe */}
                   <Button variant="primary" onClick={() => handleShowRecipeCard(recipe)}>
                     View Details

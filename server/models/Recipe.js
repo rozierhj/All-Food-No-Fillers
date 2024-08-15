@@ -14,10 +14,9 @@ const recipeSchema = new Schema({
     type: String,
     required: true,
   },
-  detail: {
+  steps: [{
     type: String,
-    required: true,
-  }
+  }]
 });
 
 module.exports = recipeSchema;

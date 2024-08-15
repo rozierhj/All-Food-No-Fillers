@@ -36,6 +36,7 @@ export const SAVE_RECIPE = gql`
         recipeId
         title
         image
+        steps
       }
     }
   }
@@ -51,6 +52,7 @@ export const REMOVE_RECIPE = gql`
         recipeId
         title
         image
+        steps
       }
     }
   }

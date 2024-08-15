@@ -63,11 +63,11 @@ const resolvers = {
     },
 
     // add recipe to users favorited recipes
-    saveRecipe: async (parent, {recipeId, title, image }, context) => {
+    saveRecipe: async (parent, {recipeId, title, image, steps }, context) => {
       if (context.foodie) {
         const updatedFoodie = await Foodie.findByIdAndUpdate(
           { _id: context.foodie._id },//find user with id
-          { $addToSet: { savedRecipes: { recipeId, title, image} } },//add data as object to recipes array
+          { $addToSet: { savedRecipes: { recipeId, title, image, steps} } },//add data as object to recipes array
           { new: true }//update the document
         ).populate('savedRecipes');
 

@@ -7,6 +7,7 @@ const typeDefs = gql`
     recipeId: Int
     title: String
     image: String
+    steps: [String]
   }
 
   # Define the Foodie type
@@ -49,7 +50,7 @@ const typeDefs = gql`
 
     addFoodie(username: String!, email: String!, password: String!): Auth
 
-    saveRecipe(recipeId: Int, title: String, image: String): Foodie
+    saveRecipe(recipeId: Int, title: String, image: String, steps: String!): Foodie
 
     removeRecipe(recipeId: Int!): Foodie
 

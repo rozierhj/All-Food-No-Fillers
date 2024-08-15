@@ -104,7 +104,6 @@ const SearchRecipes = () => {
         steps: [],
         
       }));
-      console.log(recipeData);
 
       for (let i =0; i < recipeData.length; i++){
         console.log(recipeData[i].recipeId);
@@ -116,9 +115,9 @@ const SearchRecipes = () => {
               },
               });
               recipeData[i].steps=[...detail.data.analyzedInstructions[0].steps];
-              console.log(recipeData);
       };
-
+        const recipeSteps = recipeData.steps;
+        console.log('testiting testing');
       
       
 
@@ -148,6 +147,7 @@ const SearchRecipes = () => {
     
     // find the recipe in `searchedRecipes` state by the matching id
     const recipeToSave = searchedRecipes.find((recipe) => recipe.recipeId === recipeId);
+
 
     //if use not authentice then leave
     if (!Auth.loggedIn()) {

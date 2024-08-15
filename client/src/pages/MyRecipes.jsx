@@ -112,7 +112,7 @@ const SavedRecipes = () => {
                     <p className='small'>Authors: </p>
                     <Card.Text>description</Card.Text>
                     {/* button for showing the reipe details in the RecipeCard model */}
-                    <Button variant="primary" onClick={() => handleShowRecipeCard(recipe)}>
+                    <Button variant="warning" onClick={() => handleShowRecipeCard(recipe)}>
                     View Details
                   </Button>
                   {/* button for removing the recipe */}

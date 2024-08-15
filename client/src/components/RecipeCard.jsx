@@ -78,10 +78,10 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
 
   return (
     <Modal show={show} onHide={handleClose} className='recipes'>
-      <Modal.Header closeButton>
+      <Modal.Header className='bg-danger font-bold ' closeButton>
         <Modal.Title>{recipe.title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className='bg-warning border-black '>
         {recipe.image && (
           <img
             src={recipe.image}
@@ -107,18 +107,18 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
         {/* render the new comment for if the user clicks the add comment button */}
         {showAddComment && <RecipeComment recipeId={recipe.recipeId}/>}
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+      <Modal.Footer className='bg-danger'>
+        <Button variant="dark" onClick={handleClose}>
           Close
         </Button>
         {/* button to show comments only visible if user is logged in */}
         {Auth.loggedIn() && (
-          <Button className='btn-block btn-info mt-2' onClick={toggleComments}>
+          <Button className='btn-block btn-dark mt-2' onClick={toggleComments}>
             {showComments ? 'Hide Comments' : 'Show Comments'}
           </Button>
           )}
         {/* upvote button */}
-        <Button className='btn-block btn-info mt-2' onClick={handleUpvote}>Upvote</Button>
+        <Button className='btn-block btn-dark mt-2' onClick={handleUpvote}>Upvote</Button>
       </Modal.Footer>
     </Modal>
   );

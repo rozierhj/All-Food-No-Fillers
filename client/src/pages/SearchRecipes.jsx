@@ -85,6 +85,7 @@ const SearchRecipes = () => {
           apiKey: `${API_KEY}`,
         },
       });
+
       console.log(response);
       if (!response) {
         throw new Error('something went wrong!');

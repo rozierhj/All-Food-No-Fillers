@@ -188,10 +188,10 @@ const SearchRecipes = () => {
 
   return (
     <>
-      <div className="text-light bg-dark p-5">
+      <div className="text-light bg-warning p-5">
         {/* container for the page header */}
-        <Container>
-          <h1>Find Delicious Recipes!</h1>
+        <Container >
+          <h1 className='text-black' >Find Delicious Recipes!</h1>
           <Form onSubmit={handleFormSubmit}>
             <Row>
               <Col xs={12} md={8}>
@@ -205,7 +205,7 @@ const SearchRecipes = () => {
                 />
               </Col>
               <Col xs={12} md={4}>
-                <Button type='submit' variant='success' size='lg'>
+                <Button type='submit' variant='danger' size='lg' className='text-black border-black  '>
                   Find Recipe
                 </Button>
               </Col>
@@ -219,7 +219,7 @@ const SearchRecipes = () => {
         <Row>
           {searchedRecipes.map((recipe) => (
             <Col className='oneCard' md="4" key={recipe.recipeId}>
-              <Card border='dark'>
+              <Card border='secondary'>
                 {recipe.image && (
                   <Card.Img src={recipe.image} alt={`The cover for ${recipe.title}`} variant='top' />
                 )}
@@ -232,14 +232,14 @@ const SearchRecipes = () => {
                     ))}
                   </ol> */}
                   {/* button controls if user can see RecipeCard with data specific to that recipe */}
-                  <Button variant="primary" onClick={() => handleShowRecipeCard(recipe)}>
+                  <Button variant="danger" onClick={() => handleShowRecipeCard(recipe)}>
                     View Details
                   </Button>
                   {/* show this button only is a user is signed in */}
                   {Auth.loggedIn() && (
                     <Button
                       disabled={savedRecipeIds?.some((savedRecipeId) => savedRecipeId === recipe.recipeId)}
-                      className='btn-block btn-info mt-2'
+                      className='btn-block btn-warning mt-2 text-white '
                       onClick={() => handleSaveRecipe(recipe.recipeId)}>
                       {savedRecipeIds?.some((savedRecipeId) => savedRecipeId === recipe.recipeId)
                         ? 'This recipe is a favorite!'

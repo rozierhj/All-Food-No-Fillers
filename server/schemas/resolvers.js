@@ -82,7 +82,7 @@ const resolvers = {
         //find the foodie by their id
         const updatedFoodie = await Foodie.findByIdAndUpdate(
           { _id: context.foodie._id },
-          { $pull: { savedRecipes: { recipeId } } },//pull the recipe from the foodies favorited recipes
+          { $pull: { savedRecipes: { recipeId  } } },//pull the recipe from the foodies favorited recipes
           { new: true }//update document
         ).populate('savedRecipes');
 

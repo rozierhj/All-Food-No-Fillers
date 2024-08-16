@@ -27,7 +27,7 @@ const WelcomeVideoModal = ({show, handleClose})=>{
         </Modal.Header>
         <Modal.Body >
             <video width="100%" height="auto" controls autoPlay style={{maxHeight: 'calc(80vh - 100px'}}>
-                <source src={'../../public/welcome.mp4'} type='video/mp4'/>
+                <source src={'/welcome.mp4'} type='video/mp4'/>
             </video>
             <Button variant="secondary" onClick={handleClose}>
                 Close

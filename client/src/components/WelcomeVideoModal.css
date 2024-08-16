@@ -1,0 +1,23 @@
+.modal-full-height .modal-dialog{
+    height: 100%;
+}
+
+.modal-full-height .modal-content{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-full-height .modal-body{
+    flex: 1 1 auto;
+    /* overflow-y:visible; */
+}
+
+.custom-modal .modal-dialog{
+    max-width: 60%;
+}
+
+.custom-modal .modal-content{
+    max-height: 100vh;
+    /* overflow: hidden; */
+}

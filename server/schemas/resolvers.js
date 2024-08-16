@@ -22,7 +22,7 @@ const resolvers = {
     },
 
     getWelcomeVideo: async () => {
-      const videoUrl = '/assets/welcome.mp4';
+      const videoUrl = '../../public/welcome.mp4';
       return videoUrl;
     }
   },

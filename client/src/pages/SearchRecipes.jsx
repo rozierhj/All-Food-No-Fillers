@@ -14,6 +14,7 @@ import {GET_ME} from '../utils/queries';
 import { SAVE_RECIPE } from '../utils/mutations';
 import RecipeCard from '../components/RecipeCard';
 import './SearchRecipes.css';
+import WelcomeVideoModal from '../components/WelcomeVideoModal';
 // import { index } from '../../../server/models/Recipe';
 const URL = "https://api.spoonacular.com/recipes/complexSearch";
 const API_KEY= "cdc727804129496c8ed7564453c15133";
@@ -32,6 +33,8 @@ const SearchRecipes = () => {
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState('');
 
+  const [showVideoModal, setShowVideoModal] = useState('');
+
   useEffect(() => {
     // Check if 'searchedRecipes' exists in localStorage
     const storedRecipes = localStorage.getItem('searchedRecipes');
@@ -42,6 +45,11 @@ const SearchRecipes = () => {
     } else {
       // If it doesn't exist, initialize it with an empty array in localStorage
       localStorage.setItem('searchedRecipes', JSON.stringify([]));
+    }
+
+    if (localStorage.getItem('firstLogin')){
+      setShowVideoModal(true);
+      localStorage.removeItem('firstLogin');
     }
   }, []);
 
@@ -118,10 +126,7 @@ const SearchRecipes = () => {
       };
         const recipeSteps = recipeData.steps;
         console.log('testiting testing');
-      alert('go for gold');
-      
-
-     
+   
       // CTD loop through recipe data set 
 
       //update searchedRecipes state with the new recipe data
@@ -185,6 +190,10 @@ const SearchRecipes = () => {
 
   //loop through all saved recipes and grab recpieId or return empty array
   const savedRecipeIds = meData?.me?.savedRecipes?.map(recipe => recipe.recipeId) || [];
+
+  const handleCloseVideoModal = () =>{
+    setShowVideoModal(false);
+  }
 
   return (
     <>
@@ -259,6 +268,7 @@ const SearchRecipes = () => {
             handleClose={handleCloseRecipeCard}
             recipe={selectedRecipe}
           />
+          <WelcomeVideoModal show={showVideoModal} handleClose={handleCloseVideoModal}/>
     </>
   );
 };

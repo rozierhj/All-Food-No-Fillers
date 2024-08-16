@@ -12,10 +12,10 @@ const AppNavbar = () => {
 
   return (
     <>
-      <Navbar bg='dark' variant='dark' expand='lg'>
+      <Navbar bg='red-700' variant='dark' expand='lg' className='border border-dark'>
         <Container fluid>
-          <Navbar.Brand as={Link} to='/'>
-            All Food No Filler!
+          <Navbar.Brand >
+            <img src="../src/assets/logo-01.jpg" alt="Logo" style={{width: '150px', height: 'auto'}} />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls='navbar' />
           <Navbar.Collapse id='navbar' className='d-flex flex-row-reverse'>

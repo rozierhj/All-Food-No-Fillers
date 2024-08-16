@@ -4,6 +4,8 @@
     display: flex;
     flex-direction: column;
     max-width: 100%;
+    background-color:#201E1F ;
+    color: white;
     /* margin: 5px; */
   }
   
@@ -19,6 +21,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    
   }
   
   
@@ -29,6 +32,7 @@
     white-space: nowrap;
     overflow: hidden; /* Truncate the title if it overflows */
     text-overflow: ellipsis;
+  
   }
   
  
@@ -38,6 +42,7 @@
     white-space: nowrap;
     overflow: hidden;  /* Truncate recipe descriptions if they overflow */
     text-overflow: ellipsis;
+    
   }
   
   /* allign buttons vertially on card */

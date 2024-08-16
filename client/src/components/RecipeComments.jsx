@@ -44,7 +44,7 @@ const RecipeComments = ({ recipeId }) => {
     </ListGroup>
       {/* show add comment button if the user is logged in and the comment form is not already being shown */}
     {Auth.loggedIn()&& !showAddComment && (
-      <Button variant='primary' onClick={handleAddCommentClick} className='mt-3'>
+      <Button variant='danger' onClick={handleAddCommentClick} className='mt-3'>
         Add Comment
       </Button>
     )}

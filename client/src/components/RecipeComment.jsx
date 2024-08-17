@@ -17,7 +17,7 @@ const RecipeComment = ({recipeId, refetchComments, onClose}) => {
     const [addReaction] = useMutation(ADD_REACTION);
     const [updateReaction] = useMutation(UPDATE_REACTION);
     const [error, setError] = useState(null);
-    const [getRecipeReaction,{data:reactionData}] = useLazyQuery(GET_RECIPE_REACTION);
+    const [getRecipeReaction] = useLazyQuery(GET_RECIPE_REACTION);
 
     //get user data
     useEffect(()=>{
@@ -42,35 +42,58 @@ const RecipeComment = ({recipeId, refetchComments, onClose}) => {
     try{
         console.log(recipeId, username, commentText);
         //mutation for adding a comment is executed
-        const {data : commentData} = await addComment({
-            variables:{
-                recipeId: recipeId,
-                username: username,
-                text: commentText,
-            },
-        });
         
-        const commentId = await commentData.addComment._id;
-        const {data: reactionData} = await getRecipeReaction({variables:{recipeId}});
 
-        if(reactionData?.getRecipeReaction){
-            
+        const {data: reactionData} = await getRecipeReaction({variables:{recipeId}});
+        //reactionData.getRecipeReaction.__typename === 'Reaction'
+        if(reactionData?.getRecipeReaction?.__typename === 'Reaction'){
+           
+            const {data : commentData} = await addComment({
+                variables:{
+                    recipeId: recipeId,
+                    username: username,
+                    text: commentText,
+                },
+            });
+            const commentId = await commentData.addComment._id;
+
             await updateReaction({
                 variables:{
                     reactionId:reactionData.getRecipeReaction._id,
                     commentId: commentId,
                 }
-            })
+            });
         }
         else{
-            alert('adding reaction');
-            await addReaction({
+            
+                const {data:reactionCreationData} = await addReaction({
                 
+                    variables:{
+                        recipeId:recipeId
+                    }
+                });
+
+
+            
+            const {data : commentData} = await addComment({
                 variables:{
-                    recipeId:recipeId,
-                    commentId:commentId,
+                    recipeId: recipeId,
+                    username: username,
+                    text: commentText,
+                },
+            });
+          
+            const commentId = await commentData.addComment._id;
+
+            const newReactionId = await reactionCreationData.addReaction._id;
+           
+            await updateReaction({
+                variables:{
+                    reactionId:newReactionId,
+                    commentId: commentId,
                 }
-            })
+            });
+            
         }
       
         setCommentText('');

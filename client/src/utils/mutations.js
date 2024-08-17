@@ -77,19 +77,18 @@ mutation addComment($recipeId: Int!, $username: String!, $text: String!){
 
 export const ADD_REACTION = gql`
 
-  mutation addReaction($recipeId: Int!, $commentId: ID){
-  addReaction(recipeId: $recipeId, commentId:$commentId){
-    _id
-    recipeId
-    comments{
+  mutation addReaction($recipeId: Int!){
+  addReaction(recipeId: $recipeId){
       _id
-      text
-      username
       recipeId
+      comments{
+        _id
+        text
+        username
+        recipeId
+      }
     }
   }
-  }
-
 `;
 
 export const UPDATE_REACTION = gql`

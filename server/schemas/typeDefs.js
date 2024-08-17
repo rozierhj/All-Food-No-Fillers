@@ -59,7 +59,7 @@ const typeDefs = gql`
 
     addComment(recipeId: Int!, username: String!, text: String!): Comment
 
-    addReaction(recpeId: Int!, commentId: ID, upVotes: Int): Reaction
+    addReaction(recipeId: Int!): Reaction
 
     updateReaction(reactionId: ID!, commentId: ID, upVotes: Int): Reaction
 

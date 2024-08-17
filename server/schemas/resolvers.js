@@ -121,9 +121,8 @@ const resolvers = {
       throw new AuthenticationError('You must be logged in to add a comment');
     },
 
-    addReaction: async(parent,{recipeId, commentId}) =>{
-      const newReaction = await Reaction.create({recipeId:recipeId, comments: [commentId], upVotes: 0 },
-        {new:true}
+    addReaction: async(parent,{recipeId}) =>{
+      const newReaction = await Reaction.create({recipeId:recipeId, comments:[], upVotes: 0 }
       );
       return newReaction;
     },

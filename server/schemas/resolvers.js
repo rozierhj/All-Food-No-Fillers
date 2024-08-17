@@ -17,8 +17,12 @@ const resolvers = {
     },
 
     //get the comments from a specific recipe
-    RecipeComments: async (parent, { recipeId }) => {
-      return Comment.find({ recipeId });
+    getRecipeComments: async (parent, { recipeId }) => {
+      return await Comment.find({ recipeId });
+    },
+
+    getRecipeReaction: async (parent, {recipeId}) =>{
+      return await Reaction.findOne({recipeId});
     },
 
     getWelcomeVideo: async () => {
@@ -99,7 +103,8 @@ const resolvers = {
           text,
           username,
           recipeId,
-        });
+        },
+      {new:true});
 
         let reaction = await Reaction.findOne({recipeId});
 
@@ -117,7 +122,9 @@ const resolvers = {
     },
 
     addReaction: async(parent,{recipeId, commentId}) =>{
-      const newReaction = await Reaction.create({recipeId:recipeId, comments: [commentId], upVotes: 0 });
+      const newReaction = await Reaction.create({recipeId:recipeId, comments: [commentId], upVotes: 0 },
+        {new:true}
+      );
       return newReaction;
     },
 

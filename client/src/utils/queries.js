@@ -20,13 +20,23 @@ export const GET_ME = gql`
 
 export const GET_RECIPE_COMMENTS = gql`
   query getRecipeComments($recipeId: Int!) {
-    RecipeComments(recipeId: $recipeId) {
+    getRecipeComments(recipeId: $recipeId) {
       _id
       text
       username
       recipeId
     }
   }
+`;
+
+export const GET_RECIPE_REACTION = gql`
+
+query getRecipeReaction($recipeId:Int!){
+  getRecipeReaction(recipeId: $recipeId){
+  _id
+  }
+}
+
 `;
 
 export const GET_WELCOME_VIDEO = gql`

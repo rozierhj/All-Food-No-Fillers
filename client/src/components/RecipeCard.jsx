@@ -4,7 +4,7 @@ import Auth from '../utils/auth';
 import {GET_ME} from '../utils/queries';
 import {useMutation, useLazyQuery} from '@apollo/client';
 import RecipeComments from './RecipeComments';
-import RecipeComment from './RecipeComment';
+// import RecipeComment from './RecipeComment';
 import {UPVOTE} from '../utils/mutations';
 
 // const URL=`https://api.spoonacular.com/recipes/${recipeId}/information`
@@ -28,7 +28,7 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
   //state to control if comments are visible
   const [showComments, setShowComments] = useState(false);
   //state to control is the add comment form is visible
-  const [showAddComment, setShowAddComment] = useState(false);
+  // const [showAddComment, setShowAddComment] = useState(false);
   //state tracks if user has upvoted recipe
   const [upvoted, setUpvoted] = useState(false);
   //mutation for handeling upvote
@@ -47,15 +47,15 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
     //toggle comments show or hide state
     setShowComments(!showComments);
     //when toggling comments either showing or hiding the form to add comments should be off
-    setShowAddComment(false);
+    // setShowAddComment(false);
   };
 
   //function for displaying add comment form
-  const handleAddCommentClick = () =>{
+  // const handleAddCommentClick = () =>{
 
-    //show form to add a new comment
-    setShowAddComment(true);
-  };
+  //   //show form to add a new comment
+  //   setShowAddComment(true);
+  // };
 
   //function for upvoting recipes
   const handleUpvote = async () => {
@@ -105,7 +105,7 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
             </Button>
         )} */}
         {/* render the new comment for if the user clicks the add comment button */}
-        {showAddComment && <RecipeComment recipeId={recipe.recipeId}/>}
+        {/* {showAddComment && <RecipeComment recipeId={recipe.recipeId}/>} */}
       </Modal.Body>
       <Modal.Footer className='bg-danger'>
         <Button variant="dark" onClick={handleClose}>

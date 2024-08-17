@@ -10,7 +10,7 @@ const RecipeComments = ({ recipeId }) => {
   const [showAddComment, setShowAddComment] = useState(false);
 
   //execute get recipe comments query using the recipe id to find related comments
-  const { loading, error, data } = useQuery(GET_RECIPE_COMMENTS, {
+  const { loading, error, data, refetch } = useQuery(GET_RECIPE_COMMENTS, {
     variables: { recipeId },
   });
 
@@ -21,6 +21,11 @@ const RecipeComments = ({ recipeId }) => {
     console.log(recipeId);
   }
 
+  const handleCloseCommentAdded = () =>{
+    setShowAddComment(false);
+    refetch();
+    
+  }
   //spinner icon if the comments are still loading
   if (loading) return <Spinner animation="border" />;
 
@@ -31,9 +36,9 @@ const RecipeComments = ({ recipeId }) => {
     <div>
       {/* display group for all comments if they exist */}
     <ListGroup>
-      {data.RecipeComments.length > 0 ? (
+      {data.getRecipeComments.length > 0 ? (
         // map through the comments and show the username of the commenter followed by their comment
-        data.RecipeComments.map((comment) => (
+        data.getRecipeComments.map((comment) => (
           <ListGroup.Item key={comment._id}>
             <strong>{comment.username}:</strong> {comment.text}
           </ListGroup.Item>
@@ -49,10 +54,10 @@ const RecipeComments = ({ recipeId }) => {
       </Button>
     )}
     {/* show the add comment modal if showAddComment is true (user clicked add comment) */}
-    {showAddComment && <RecipeComment recipeId={recipeId} />}
+    {showAddComment && (<RecipeComment recipeId={recipeId} refetchComments={refetch} onClose={handleCloseCommentAdded}/>)}
     </div>
 
   );
 
-}
+};
 export default RecipeComments;

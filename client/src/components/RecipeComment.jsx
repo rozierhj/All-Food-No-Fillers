@@ -2,10 +2,10 @@ import {useState, useEffect} from 'react';
 import {Form, Button} from 'react-bootstrap';
 import {useMutation, useLazyQuery} from '@apollo/client';
 import {ADD_COMMENT, ADD_REACTION, UPDATE_REACTION} from '../utils/mutations';
-import { GET_RECIPE_COMMENTS, GET_ME } from '../utils/queries';
+import {GET_ME, GET_RECIPE_REACTION } from '../utils/queries';
 import Auth from '../utils/auth';
 
-const RecipeComment = ({recipeId}) => {
+const RecipeComment = ({recipeId, refetchComments, onClose}) => {
     //state managing text of the comment
     const [commentText, setCommentText] = useState('');
     //state stores the username
@@ -17,6 +17,7 @@ const RecipeComment = ({recipeId}) => {
     const [addReaction] = useMutation(ADD_REACTION);
     const [updateReaction] = useMutation(UPDATE_REACTION);
     const [error, setError] = useState(null);
+    const [getRecipeReaction,{data:reactionData}] = useLazyQuery(GET_RECIPE_REACTION);
 
     //get user data
     useEffect(()=>{
@@ -37,7 +38,7 @@ const RecipeComment = ({recipeId}) => {
     const handleCommentSubmit = async (event) => {
         event.preventDefault();
         setError(null);
-
+        
     try{
         console.log(recipeId, username, commentText);
         //mutation for adding a comment is executed
@@ -48,25 +49,33 @@ const RecipeComment = ({recipeId}) => {
                 text: commentText,
             },
         });
+        
+        const commentId = await commentData.addComment._id;
+        const {data: reactionData} = await getRecipeReaction({variables:{recipeId}});
 
-        const commentId = commentData.addComment._id;
-
-        const {data : reactionData} = await addReaction({
-            variables: {
-                recipeId: recipeId,
-                commentId: commentId,
-            },
-        });
-
-        if(!reactionData.addReaction){
+        if(reactionData?.getRecipeReaction){
+            
             await updateReaction({
-                variables: {
-                    reactionId: reactionData._id,
+                variables:{
+                    reactionId:reactionData.getRecipeReaction._id,
                     commentId: commentId,
-                },
-            });
+                }
+            })
         }
+        else{
+            alert('adding reaction');
+            await addReaction({
+                
+                variables:{
+                    recipeId:recipeId,
+                    commentId:commentId,
+                }
+            })
+        }
+      
         setCommentText('');
+        await onClose();
+        await refetchComments();
     }
     catch(err){
         console.error('could not add comment',err);

@@ -23,8 +23,9 @@ const typeDefs = gql`
   # Define the Query type
   type Query {
     me: Foodie
-    RecipeComments(recipeId: Int!): [Comment]
+    getRecipeComments(recipeId: Int!): [Comment]
     getWelcomeVideo: String
+    getRecipeReaction(recipeId: Int!): Reaction
   }
 
   #Define Comment type

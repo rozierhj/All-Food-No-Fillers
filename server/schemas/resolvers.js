@@ -71,7 +71,20 @@ const resolvers = {
       if (context.foodie) {
         const updatedFoodie = await Foodie.findByIdAndUpdate(
           { _id: context.foodie._id },//find user with id
-          { $addToSet: { savedRecipes: { recipeId, title, image, steps} } },//add data as object to recipes array
+          { 
+            $addToSet: { 
+              savedRecipes: { 
+                recipeId, 
+                title, 
+                image, 
+                steps: steps.map(step => ({
+                  step: step.step,
+                  ingredients: step.ingredients,
+                  ingredientsImage: step.ingredientsImage,
+                })),
+              }, 
+            }, 
+          },//add data as object to recipes array
           { new: true }//update the document
         ).populate('savedRecipes');
 

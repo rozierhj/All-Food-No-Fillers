@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Row, Col, Image } from 'react-bootstrap';
 import Auth from '../utils/auth';
 import {GET_ME} from '../utils/queries';
 import {useMutation, useLazyQuery} from '@apollo/client';
 import RecipeComments from './RecipeComments';
 // import RecipeComment from './RecipeComment';
 import {UPVOTE} from '../utils/mutations';
+import './RecipeCard.css';
 
 // const URL=`https://api.spoonacular.com/recipes/${recipeId}/information`
 // const API_KEY= "cdc727804129496c8ed7564453c15133";
@@ -77,35 +78,57 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} className='recipes'>
+    <Modal show={show} onHide={handleClose} className='recipe-modal' dialogClassName='modal-dialog-centered'>
       <Modal.Header className='bg-danger font-bold ' closeButton>
-        <Modal.Title>{recipe.title}</Modal.Title>
+        <Modal.Title>Delicious Recipe </Modal.Title>
       </Modal.Header>
-      <Modal.Body className='bg-warning border-black '>
-        {recipe.image && (
-          <img
-            src={recipe.image}
-            alt={`image for ${recipe.title}`}
-            style={{ width: '100%' }}
-          />
-        )}
-        <Modal.Title>Steps for {recipe.title} </Modal.Title>
-        
+      <Modal.Body className=' border-black the-recipe-card'>
+        <Row>
+          <Col md={8}>
+            <h2 className={'recipe-title'}>{recipe.title}</h2>
+          </Col>
+          <Col md={4}>
+          {
+            recipe.image && (<Image 
+              src={recipe.image}
+              alt={`image for ${recipe.title}`}
+              fluid
+            />)
+          }
+          </Col>
+        </Row>
         <ol>
-                    {recipe.steps.map((step, index)=> ( 
-                      <li key={index}>{step.step}</li>
-                    ))}
-                  </ol>
-        {/* render comments when showComments is true when user selects details button */}
+          {recipe.steps.map((step, index)=> ( 
+            <Row key={index} className="mt-4">
+              <Col md={8}>
+              <h4>Step {index + 1}</h4>
+              <p>{step.step}</p>
+              </Col>
+            
+            <Col md={4}>
+              <h4> Step {index +1} Ingredients</h4>
+              <ul className='ingredients-list'>
+                {step.ingredients.map((ingredient, ingIndex) =>(
+                  <li key={ingIndex} className={'ingredient-item'}>
+                    <div className='ingredient-name'>{ingredient}</div> 
+                    <div className='image-container'>
+                    {step.ingredientsImage[ingIndex] &&(
+                      <Image 
+                        src={`https://img.spoonacular.com/ingredients_100x100/${step.ingredientsImage[ingIndex]}`}
+                        alt={`image of ${ingredient}`}
+                        className='ingredient-image'
+                      />
+                    )}
+                    </div>
+                    </li>
+                ))}
+              </ul>
+            </Col>
+            </Row>
+              // <li key={index}>{step.step}</li>
+            ))}
+        </ol>
         {showComments && <RecipeComments recipeId={recipe.recipeId} />}
-        {/* render the add comment button if the comments are visible and the user is logged in */}
-        {/* {showComments && Auth.loggedIn() && !showAddComment && (
-          <Button variant="primary" onClick={handleAddCommentClick} className="mt-3">
-            Add Comment
-            </Button>
-        )} */}
-        {/* render the new comment for if the user clicks the add comment button */}
-        {/* {showAddComment && <RecipeComment recipeId={recipe.recipeId}/>} */}
       </Modal.Body>
       <Modal.Footer className='bg-danger'>
         <Button variant="dark" onClick={handleClose}>

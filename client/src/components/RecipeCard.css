@@ -1,0 +1,59 @@
+.recipe-modal .modal-dialog {
+    max-width: 40vw;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+}
+
+.recipe-modal .modal-content{
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.recipe-modal ,modal-body{
+
+    overflow-y: auto;
+}
+
+/* style recipe title and image */
+.recipe-title{
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.recipe-image{
+    max-width: 100%;
+    height: auto;
+}
+
+.ingredients-list{
+    padding:0;
+}
+
+.ingredient-item{
+ font-size: 20px; 
+ display: flex;
+ align-items: center;  
+ justify-content: space-between;
+ margin: 5px;
+}
+
+.ingredient-name{
+    flex-grow:1;
+}
+
+.ingredient-image{
+    text-align: right;
+    width: auto;
+    height: 50px;
+    
+}
+.image-container{
+    display: flex;
+    align-items:start;
+    justify-content: flex-end;
+}
+
+.the-recipe-card{
+    background-color: white;
+}

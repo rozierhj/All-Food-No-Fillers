@@ -28,7 +28,7 @@ export const LOGIN_FOODIE = gql`
 
 export const SAVE_RECIPE = gql`
 
-  mutation saveRecipe($recipeId: Int!, $title: String, $image: String, $steps: [String]) {
+  mutation saveRecipe($recipeId: Int!, $title: String, $image: String, $steps: [StepInput]) {
     saveRecipe(recipeId: $recipeId,  title: $title, image: $image, steps: $steps) {
 
       _id
@@ -38,7 +38,11 @@ export const SAVE_RECIPE = gql`
         recipeId
         title
         image
-        steps
+        steps {
+          step
+          ingredients
+          ingredientsImage
+        }
       }
     }
   }
@@ -54,7 +58,11 @@ export const REMOVE_RECIPE = gql`
         recipeId
         title
         image
-        steps
+        steps{
+          step
+          ingredients
+          ingredientsImage
+        }
       }
     }
   }

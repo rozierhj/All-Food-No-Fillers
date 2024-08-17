@@ -1,13 +1,27 @@
 const {gql} = require('apollo-server-express');
 
 const typeDefs = gql`
+
+ #define step input
+ input StepInput{
+ step: String!
+ ingredients: [String]
+ ingredientsImage: [String]
+ }
+
   # Define the Recipe type
   type Recipe {
     _id: ID
     recipeId: Int
     title: String
     image: String
-    steps: [String]
+    steps: [Step]
+  }
+
+  type Step{
+    step: String
+    ingredients:[String]
+    ingredientsImage:[String]
   }
 
   # Define the Foodie type
@@ -44,6 +58,8 @@ const typeDefs = gql`
  comments: [Comment]
  }
 
+
+
   # Define the Mutation types
   type Mutation {
 
@@ -51,9 +67,7 @@ const typeDefs = gql`
 
     addFoodie(username: String!, email: String!, password: String!): Auth
 
-
-    saveRecipe(recipeId: Int, title: String, image: String, steps: [String]): Foodie
-
+    saveRecipe(recipeId: Int, title: String, image: String, steps: [StepInput]): Foodie
 
     removeRecipe(recipeId: Int!): Foodie
 

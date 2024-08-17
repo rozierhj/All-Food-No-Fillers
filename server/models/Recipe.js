@@ -15,7 +15,15 @@ const recipeSchema = new Schema({
     required: true,
   },
   steps: [{
-    type: String,
+    step:{
+      type: String,
+    },
+    ingredients:[{
+        type: String
+      }],
+    ingredientsImage:[{
+      type: String
+    }]
   }]
 });
 

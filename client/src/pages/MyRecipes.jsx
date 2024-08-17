@@ -109,8 +109,6 @@ const SavedRecipes = () => {
                   {recipe.image ? <Card.Img src={recipe.image} alt={`The cover for ${recipe.title}`} variant='top' /> : null}
                   <Card.Body>
                     <Card.Title>{recipe.title}</Card.Title>
-                    <p className='small'>Authors: </p>
-                    <Card.Text>description</Card.Text>
                     {/* button for showing the reipe details in the RecipeCard model */}
                     <Button variant="warning" onClick={() => handleShowRecipeCard(recipe)}>
                     View Details

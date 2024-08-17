@@ -69,7 +69,7 @@ const SearchRecipes = () => {
           //update the cache with the new saved recipe
           cache.writeQuery({
             query:GET_ME,
-            data: {me: {...me, savedRecipes:[...me.savedRecipes, saveRecipe]}},
+            data: {me: {...me, savedRecipes:[...me.savedRecipes, saveRecipe.savedRecipes.pop()]}},
           });
       }
       catch(err){
@@ -112,7 +112,7 @@ const SearchRecipes = () => {
         steps: [],
         
       }));
-
+      
       for (let i =0; i < recipeData.length; i++){
         console.log(recipeData[i].recipeId);
         const detail= await axios.get
@@ -122,10 +122,31 @@ const SearchRecipes = () => {
                 apiKey: `${API_KEY}`,
               },
               });
-              recipeData[i].steps=[...detail.data.analyzedInstructions[0].steps];
+              let stepsList = detail.data.analyzedInstructions[0].steps;
+              
+
+              console.log('the steps list',stepsList);
+
+              for(let stp = 0; stp < stepsList.length; stp++){
+
+                let oneStep = {
+                  step: stepsList[stp].step,
+                  ingredients:[],
+                  ingredientsImage:[]
+                }
+
+                for(let ing = 0; ing <stepsList[stp].ingredients.length; ing++){
+                  oneStep.ingredients.push(stepsList[stp].ingredients[ing].name);
+                  oneStep.ingredientsImage.push(stepsList[stp].ingredients[ing].image);
+                }
+                console.log('oneStep',oneStep);
+                recipeData[i].steps.push(oneStep);
+              }
+              
+              console.log('the recipe data collected',recipeData);
       };
         const recipeSteps = recipeData.steps;
-        console.log('testiting testing');
+        console.log(recipeData);
    
       // CTD loop through recipe data set 
 

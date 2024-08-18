@@ -38,6 +38,7 @@ export const GET_RECIPE_REACTION = gql`
 query getRecipeReaction($recipeId:Int!){
   getRecipeReaction(recipeId: $recipeId){
   _id
+  upVotes
   }
 }
 

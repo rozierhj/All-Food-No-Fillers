@@ -10,7 +10,7 @@ import {
 import Auth from '../utils/auth';
 import axios from 'axios';
 import {useMutation, useLazyQuery} from '@apollo/client';
-import {GET_ME} from '../utils/queries';
+import {GET_ME, GET_RECIPE_REACTION} from '../utils/queries';
 import { SAVE_RECIPE } from '../utils/mutations';
 import RecipeCard from '../components/RecipeCard';
 import './SearchRecipes.css';
@@ -34,6 +34,8 @@ const SearchRecipes = () => {
   const [searchInput, setSearchInput] = useState('');
 
   const [showVideoModal, setShowVideoModal] = useState('');
+
+  const [getRecipeReaction, {data:reactionData}] = useLazyQuery(GET_RECIPE_REACTION);
 
   useEffect(() => {
     // Check if 'searchedRecipes' exists in localStorage
@@ -198,12 +200,26 @@ const SearchRecipes = () => {
   };
 
   //function for showing a selected recipe via the recipeCard modal
-  const handleShowRecipeCard = (recipe) =>{
-    //get the redipe data
-    setSelectedRecipe(recipe);
-    //show the RecipeCard modal
-    setShowRecipeCard(true);
+  const handleShowRecipeCard = async (recipe) =>{
+
+    try{
+        const {data: reactionData } = await getRecipeReaction({
+          variables:{recipeId: recipe.recipeId},
+        });
+
+        const upvotes = reactionData?.getRecipeReaction?.upVotes || 0;
+        recipe.upvotes = upvotes;
+    }
+    catch(err){
+      console.error(err);
+      recipe.upvotes = 0;
+    }
+        //get the redipe data
+        setSelectedRecipe(recipe);
+        //show the RecipeCard modal
+        setShowRecipeCard(true);
   }
+
 
   //function for closing the recipe card
   const handleCloseRecipeCard = () =>{

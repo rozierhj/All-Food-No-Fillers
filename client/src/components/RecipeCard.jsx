@@ -1,24 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Modal, Button, Row, Col, Image } from 'react-bootstrap';
+import { Modal, Button, Row, Col, Image, Alert } from 'react-bootstrap';
 import Auth from '../utils/auth';
-import {GET_ME} from '../utils/queries';
+import {GET_ME, GET_RECIPE_REACTION} from '../utils/queries';
+import {UPVOTE_RECIPE, ADD_REACTION, UPDATE_REACTION} from '../utils/mutations';
 import {useMutation, useLazyQuery} from '@apollo/client';
 import RecipeComments from './RecipeComments';
 // import RecipeComment from './RecipeComment';
-import {UPVOTE} from '../utils/mutations';
 import './RecipeCard.css';
 import { FaFacebook, FaTwitter, FaEnvelope, FaInstagram } from 'react-icons/fa';
-
-// const URL=`https://api.spoonacular.com/recipes/${recipeId}/information`
-// const API_KEY= "cdc727804129496c8ed7564453c15133";
-// useEffect(() => {
-//   async function fetchRecipe() {
-//    const res= await fetch(`${URL}?apiKey=${API_KEY}`);
-//    const data= res.json();
-//    console.log(data);
-//   }
-//   fetchRecipe()
-// }, [])
 
 const RecipeCard = ({ show, handleClose, recipe }) => {
 
@@ -27,55 +16,83 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
 
   //get user data
   const [getMe, { data: meData }] = useLazyQuery(GET_ME);
+  const [username, setUsername] = useState('');
   //state to control if comments are visible
   const [showComments, setShowComments] = useState(false);
   //state to control is the add comment form is visible
-  // const [showAddComment, setShowAddComment] = useState(false);
-  //state tracks if user has upvoted recipe
-  const [upvoted, setUpvoted] = useState(false);
-  //mutation for handeling upvote
-  const [upvoteRecipe] = useMutation(UPVOTE);
-
-
-  useEffect(() => {
-    //fetch use data
-    if (Auth.loggedIn()) {
-      getMe();
+  const [addReaction] = useMutation(ADD_REACTION);
+  const [updateReaction] = useMutation(UPDATE_REACTION);
+  const [error, setError] = useState(null);
+  const [getRecipeReaction, {data:reactionData}] = useLazyQuery(GET_RECIPE_REACTION);
+  const [upvotes, setUpvotes] = useState(recipe.upvotes || 0);
+  const [upvoteRecipe] = useMutation(UPVOTE_RECIPE);
+  
+  useEffect(()=>{
+    if(recipe){
+      getRecipeReaction({variables:{recipeId:recipe.recipeId}})
     }
-  }, []);
+  },[recipe]);
+
+  useEffect(()=>{
+    if(reactionData?.getRecipeReaction){
+      setUpvotes(reactionData.getRecipeReaction.upVotes || 0);
+    }
+  },[reactionData]);
+  //state tracks if user has upvoted recipe
+  // const [upvoted, setUpvoted] = useState(false);
+  //mutation for handeling upvote
+
+
+  // useEffect(() => {
+  //   //fetch use data
+  //   if (Auth.loggedIn()) {
+  //     getMe();
+  //   }
+  // }, []);
+
+  useEffect(()=>{
+    if(Auth.loggedIn()){
+        getMe();
+    }
+}, [getMe]);
+
+//update username state once we've got the user data
+useEffect(()=>{
+    if(meData){
+        //username state set with current users username
+        setUsername(meData.me.username);
+    }
+}, [meData]);
+
+  
 
   //function controls if comments are visible
   const toggleComments = () => {
     //toggle comments show or hide state
     setShowComments(!showComments);
     //when toggling comments either showing or hiding the form to add comments should be off
-    // setShowAddComment(false);
   };
-
-  //function for displaying add comment form
-  // const handleAddCommentClick = () =>{
-
-  //   //show form to add a new comment
-  //   setShowAddComment(true);
-  // };
-
+  
   //function for upvoting recipes
   const handleUpvote = async () => {
 
     //confirm user is logged in and has not already upvoted the recipe
-    if(Auth.loggedIn() && !upvoted){
       try{
-        //upvote recipe mutation with the recipeId as a variable
-        await upvoteRecipe({
-          variables:{recipeId: recipe.recipeId},
+        console.log(recipe.recipeId, username);
+        //mutation for adding a comment is executed
+       const {data} = await upvoteRecipe({
+          variables:{recipeId:recipe.recipeId},
         });
-        //set recipe to upvoted for this user
-        setUpvoted(true);
-      } 
-      catch(err){
-        console.log('this was done in error', err);
-      }
+
+        if(data?.upvoteRecipe){
+          setUpvotes(data.upvoteRecipe.upVotes);
+        }
+        
     }
+    catch(err){
+        console.error('could not add upvote',err);
+    }
+    
   };
 
   const shareUrl = window.location.href;
@@ -145,8 +162,8 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
           </Button>
           )}
         {/* upvote button */}
-        <Button className='btn-block btn-dark mt-2' onClick={handleUpvote}>Upvote</Button>
-        <Button onClick={alert(window.location.href)} variant="primary" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank">
+        <Button className='btn-block btn-dark mt-2' onClick={handleUpvote}>Upvote ({upvotes})</Button>
+        <Button variant="primary" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank">
             <FaFacebook /> Share on Facebook
           </Button>
       </Modal.Footer>

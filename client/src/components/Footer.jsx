@@ -11,7 +11,7 @@ const Footer = () =>{
     return(
         <Navbar bg='dark' variant='dark' className='footer-navbar' fixed='bottom'>
             <Container className='justify-content-center'>
-                <div classname='social-buttons'>
+                <div className='social-buttons'>
                 <Button variant="primary" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank" className="the-sm-button">
                     <FaFacebook />
                 </Button>

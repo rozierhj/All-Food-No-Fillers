@@ -77,7 +77,7 @@ const typeDefs = gql`
 
     updateReaction(reactionId: ID!, commentId: ID, upVotes: Int): Reaction
 
-    upvoteRecipe(recipeId: Int!, commentId: ID, upVotes: Int): Reaction
+    upvoteRecipe(recipeId: Int!): Reaction
 
   }
 

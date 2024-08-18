@@ -116,7 +116,7 @@ export const UPDATE_REACTION = gql`
 
 `;
 
-export const UPVOTE = gql`
+export const UPVOTE_RECIPE = gql`
 
 mutation upvoteRecipe($recipeId: Int!){
   upvoteRecipe(recipeId: $recipeId){

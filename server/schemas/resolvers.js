@@ -151,9 +151,6 @@ const resolvers = {
     },
     //add an upvote to a recipe
     upvoteRecipe: async (parent, {recipeId}, context) => {
-      if(!context.foodie){
-        throw new AuthenticationError('You need to log in');
-      }
 
       //test if the recipe is in the reactions collection
       let reaction = await Reaction.findOne({recipeId});
@@ -164,7 +161,7 @@ const resolvers = {
       }
       else{
         //if recipe was not in reactions collection then add it to the collection and set its upvotes to one
-        reaction = await Reactions.create({
+        reaction = await Reaction.create({
           recipeId,
           upVotes: 1,
           comments: [],

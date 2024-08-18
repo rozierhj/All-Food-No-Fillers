@@ -18,7 +18,7 @@ const WelcomeVideoModal = ({show, handleClose})=>{
     }, [data]);
 
     if(loading) return <p>Loading...</p>;
-    if(error) return <p>Error fetching video!</p>;
+    if(error) return <p></p>;
 
     return (
     <Modal show={show} onHide={handleClose} centered dialogClassName='custom-modal' aria-labelledby="video-modal" >

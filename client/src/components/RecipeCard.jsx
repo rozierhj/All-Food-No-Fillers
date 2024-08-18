@@ -7,6 +7,7 @@ import RecipeComments from './RecipeComments';
 // import RecipeComment from './RecipeComment';
 import {UPVOTE} from '../utils/mutations';
 import './RecipeCard.css';
+import { FaFacebook, FaTwitter, FaEnvelope, FaInstagram } from 'react-icons/fa';
 
 // const URL=`https://api.spoonacular.com/recipes/${recipeId}/information`
 // const API_KEY= "cdc727804129496c8ed7564453c15133";
@@ -77,6 +78,9 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
     }
   };
 
+  const shareUrl = window.location.href;
+  const shareText = `check out this delicious recipe ${recipe.title}!`;
+
   return (
     <Modal show={show} onHide={handleClose} className='recipe-modal' dialogClassName='modal-dialog-centered'>
       <Modal.Header className='bg-danger font-bold ' closeButton>
@@ -142,6 +146,9 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
           )}
         {/* upvote button */}
         <Button className='btn-block btn-dark mt-2' onClick={handleUpvote}>Upvote</Button>
+        <Button onClick={alert(window.location.href)} variant="primary" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank">
+            <FaFacebook /> Share on Facebook
+          </Button>
       </Modal.Footer>
     </Modal>
   );

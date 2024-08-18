@@ -100,6 +100,8 @@ const SearchRecipes = () => {
       if (!response) {
         throw new Error('something went wrong!');
       }
+
+      console.log('first api call',response);
       //use keys from api return to retrieve an array of recipe objects
       const  items  = response.data.results;
       
@@ -122,6 +124,8 @@ const SearchRecipes = () => {
                 apiKey: `${API_KEY}`,
               },
               });
+
+              console.log('second api call', detail);
               let stepsList = detail.data.analyzedInstructions[0].steps;
               
 

@@ -1,0 +1,23 @@
+.footer-navbar{
+    width: 100%;
+    background-color: #343a40;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    position: relative;
+    /* bottom:0; */
+    /* left:0; */
+    z-index: 1000;
+}
+
+.footer-navbar .social-buttons .btn{
+    margin: 0 10px;
+}
+
+.footer-navbar .social-buttons .btn:hover {
+    opacity: 0.8;
+}
+
+.the-sm-button {
+    margin:10px;
+}

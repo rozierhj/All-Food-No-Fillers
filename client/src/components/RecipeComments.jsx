@@ -4,6 +4,7 @@ import { GET_RECIPE_COMMENTS } from '../utils/queries';
 import { Spinner, ListGroup, Button } from 'react-bootstrap';
 import RecipeComment from './RecipeComment';
 import Auth from '../utils/auth';
+import './RecipeComments.css';
 
 const RecipeComments = ({ recipeId }) => {
   //state controls of the add comment form
@@ -33,14 +34,15 @@ const RecipeComments = ({ recipeId }) => {
   if (error) return;
 
   return (
-    <div>
+    <div className='comment-section'>
       {/* display group for all comments if they exist */}
-    <ListGroup>
+    <ListGroup className='comment-list'>
       {data.getRecipeComments.length > 0 ? (
         // map through the comments and show the username of the commenter followed by their comment
         data.getRecipeComments.map((comment) => (
-          <ListGroup.Item key={comment._id}>
-            <strong>{comment.username}:</strong> {comment.text}
+          <ListGroup.Item key={comment._id} className='comment-item'>
+            <strong className='comment-username'>{comment.username}:</strong> 
+            <span className='comment-text'>{comment.text}</span>
           </ListGroup.Item>
         ))
       ) : (

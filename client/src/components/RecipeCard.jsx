@@ -104,13 +104,13 @@ useEffect(()=>{
         <Modal.Title>Delicious Recipe </Modal.Title>
       </Modal.Header>
       <Modal.Body className=' border-black the-recipe-card'>
-        <Row>
+        <Row className='card-header'>
           <Col md={8}>
             <h2 className={'recipe-title'}>{recipe.title}</h2>
           </Col>
           <Col md={4}>
           {
-            recipe.image && (<Image 
+            recipe.image && (<Image className='recipe-image'
               src={recipe.image}
               alt={`image for ${recipe.title}`}
               fluid
@@ -120,7 +120,7 @@ useEffect(()=>{
         </Row>
         <ol>
           {recipe.steps.map((step, index)=> ( 
-            <Row key={index} className="mt-4">
+            <Row key={index} className="mt-4 step-row">
               <Col md={7}>
               <h4>Step {index + 1}</h4>
               <p>{step.step}</p>
@@ -162,10 +162,10 @@ useEffect(()=>{
           </Button>
           )}
         {/* upvote button */}
-        <Button className='btn-block btn-dark mt-2' onClick={handleUpvote}>Upvote ({upvotes})</Button>
-        <Button variant="primary" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank">
-            <FaFacebook /> Share on Facebook
-          </Button>
+        <Button className='btn-block btn-dark mt-2' onClick={handleUpvote}>Upvote
+          <span className="upvote-count">{upvotes}</span>
+          <span className="upvote-arrow">⬆</span>
+        </Button>
       </Modal.Footer>
     </Modal>
   );

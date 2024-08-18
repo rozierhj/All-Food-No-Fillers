@@ -35,6 +35,11 @@ const SearchRecipes = () => {
 
   const [showVideoModal, setShowVideoModal] = useState('');
 
+  const [savedRecipeIds, setSavedRecipeIds] = useState([]);
+
+    //fetch the logged-in user's data (GET_ME query) when needed.
+ const [getMe, {data: meData, refetch}] = useLazyQuery(GET_ME);
+
   const [getRecipeReaction, {data:reactionData}] = useLazyQuery(GET_RECIPE_REACTION);
 
   useEffect(() => {
@@ -55,9 +60,13 @@ const SearchRecipes = () => {
     }
   }, []);
 
+  useEffect(()=>{
+    if(Auth.loggedIn()){
+      refetch();
+    }
+  },[refetch]);
 
-  //fetch the logged-in user's data (GET_ME query) when needed.
- const [getMe, {data: meData}] = useLazyQuery(GET_ME);
+
 
  //save a recipe 
   const [saveRecipe] = useMutation(SAVE_RECIPE,{
@@ -79,6 +88,13 @@ const SearchRecipes = () => {
       }
     }
   });
+
+  useEffect(()=>{
+    if(meData){
+      const savedIds = meData.me.savedRecipes.map(recipe=>recipe.recipeId)
+      setSavedRecipeIds(savedIds);
+    }
+  },[meData]);
 
   // search for books and set state on form submit
   const handleFormSubmit = async (event) => {
@@ -230,7 +246,7 @@ const SearchRecipes = () => {
   }
 
   //loop through all saved recipes and grab recpieId or return empty array
-  const savedRecipeIds = meData?.me?.savedRecipes?.map(recipe => recipe.recipeId) || [];
+  // const savedRecipeIds = meData?.me?.savedRecipes?.map(recipe => recipe.recipeId) || [];
 
   const handleCloseVideoModal = () =>{
     setShowVideoModal(false);

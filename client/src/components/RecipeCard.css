@@ -73,3 +73,34 @@
 
     border: 2px solid red;
 }
+
+.upvote-button{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    padding: 0;
+    margin: 0;
+
+}
+
+.upvote-arrow{
+
+    font-size: 60px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+
+}
+
+.upvote-count{
+    position: absolute;
+    color:black;
+    font-size: 20px;
+    font-weight: bolder;
+    z-index: 1000;
+    margin: 0;
+    padding: 0;
+    opacity: 0.75;
+}

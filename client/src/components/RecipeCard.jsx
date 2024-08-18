@@ -156,15 +156,15 @@ useEffect(()=>{
           Close
         </Button>
         {/* button to show comments only visible if user is logged in */}
-        {Auth.loggedIn() && (
+        {
           <Button className='btn-block btn-dark mt-2' onClick={toggleComments}>
             {showComments ? 'Hide Comments' : 'Show Comments'}
           </Button>
-          )}
+          }
         {/* upvote button */}
-        <Button className='btn-block btn-dark mt-2' onClick={handleUpvote}>Upvote
+        <Button className=' upvote-button bg-danger' onClick={handleUpvote}>
           <span className="upvote-count">{upvotes}</span>
-          <span className="upvote-arrow">⬆</span>
+          <span className="upvote-arrow">⬆️</span>
         </Button>
       </Modal.Footer>
     </Modal>

@@ -121,12 +121,12 @@ useEffect(()=>{
         <ol>
           {recipe.steps.map((step, index)=> ( 
             <Row key={index} className="mt-4">
-              <Col md={8}>
+              <Col md={7}>
               <h4>Step {index + 1}</h4>
               <p>{step.step}</p>
               </Col>
             
-            <Col md={4}>
+            <Col md={5}>
               <h4> Step {index +1} Ingredients</h4>
               <ul className='ingredients-list'>
                 {step.ingredients.map((ingredient, ingIndex) =>(

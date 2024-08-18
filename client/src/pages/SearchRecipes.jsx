@@ -257,10 +257,9 @@ const SearchRecipes = () => {
       <div className="text-light bg-warning p-5">
         {/* container for the page header */}
         <Container >
+          
+          <Form onSubmit={handleFormSubmit} className='search-form'>
           <h1 className='text-black' >Find Delicious Recipes!</h1>
-          <Form onSubmit={handleFormSubmit}>
-            <Row>
-              <Col xs={12} md={8}>
                 <Form.Control
                   name='searchInput'
                   value={searchInput}
@@ -269,13 +268,9 @@ const SearchRecipes = () => {
                   size='lg'
                   placeholder='bon appetit'
                 />
-              </Col>
-              <Col xs={12} md={4}>
                 <Button type='submit' variant='danger' size='lg' className='text-black border-black  '>
                   Find Recipe
                 </Button>
-              </Col>
-            </Row>
           </Form>
         </Container>
       </div>
@@ -292,11 +287,6 @@ const SearchRecipes = () => {
                 <Card.Body>
                   <Card.Title>{recipe.title}</Card.Title>
                   {/* <Card.Text>Steps</Card.Text> */}
-                  {/* <ol>
-                    {recipe.steps.map((step, index)=> ( 
-                      <li key={index}>{step.step}</li>
-                    ))}
-                  </ol> */}
                   {/* button controls if user can see RecipeCard with data specific to that recipe */}
                   <Button variant="danger" onClick={() => handleShowRecipeCard(recipe)}>
                     View Details

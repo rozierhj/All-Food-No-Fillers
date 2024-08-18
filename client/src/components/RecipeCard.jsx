@@ -7,7 +7,6 @@ import {useMutation, useLazyQuery} from '@apollo/client';
 import RecipeComments from './RecipeComments';
 // import RecipeComment from './RecipeComment';
 import './RecipeCard.css';
-import { FaFacebook, FaTwitter, FaEnvelope, FaInstagram } from 'react-icons/fa';
 
 const RecipeCard = ({ show, handleClose, recipe }) => {
 
@@ -20,9 +19,7 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
   //state to control if comments are visible
   const [showComments, setShowComments] = useState(false);
   //state to control is the add comment form is visible
-  const [addReaction] = useMutation(ADD_REACTION);
-  const [updateReaction] = useMutation(UPDATE_REACTION);
-  const [error, setError] = useState(null);
+
   const [getRecipeReaction, {data:reactionData}] = useLazyQuery(GET_RECIPE_REACTION);
   const [upvotes, setUpvotes] = useState(recipe.upvotes || 0);
   const [upvoteRecipe] = useMutation(UPVOTE_RECIPE);
@@ -41,14 +38,6 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
   //state tracks if user has upvoted recipe
   // const [upvoted, setUpvoted] = useState(false);
   //mutation for handeling upvote
-
-
-  // useEffect(() => {
-  //   //fetch use data
-  //   if (Auth.loggedIn()) {
-  //     getMe();
-  //   }
-  // }, []);
 
   useEffect(()=>{
     if(Auth.loggedIn()){
@@ -94,9 +83,6 @@ useEffect(()=>{
     }
     
   };
-
-  const shareUrl = window.location.href;
-  const shareText = `check out this delicious recipe ${recipe.title}!`;
 
   return (
     <Modal show={show} onHide={handleClose} className='recipe-modal' dialogClassName='modal-dialog-centered'>

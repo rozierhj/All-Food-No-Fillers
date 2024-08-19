@@ -132,4 +132,30 @@ mutation upvoteRecipe($recipeId: Int!){
 
 `;
 
+export const REMOVE_COMMENT = gql`
+  mutation removeComment($commentId: ID!) {
+    removeComment(commentId: $commentId) {
+      _id
+      recipeId
+      upVotes
+      upVoters
+      comments {
+        _id
+        text
+        username
+        recipeId
+      }
+    }
+  }
+`;
 
+export const DELETE_COMMENT = gql`
+  mutation deleteComment($commentId: ID!) {
+    deleteComment(commentId: $commentId) {
+      _id
+      text
+      username
+      recipeId
+    }
+  }
+`;

@@ -95,7 +95,7 @@ const SavedRecipes = () => {
       <div fluid className="text-light bg-dark p-5">
       {/* header container */}
         <Container>
-          <h1>Your Favorites 🧑‍🍳</h1>
+          <h1>{foodieData.username}'s Favorites 🧑‍🍳</h1>
         </Container>
       </div>
       {/* favorited recipes container */}

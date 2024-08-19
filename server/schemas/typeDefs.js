@@ -76,6 +76,10 @@ const typeDefs = gql`
 
     upvoteRecipe(recipeId: Int!): Reaction
 
+    deleteComment(commentId: ID!): Comment
+
+    removeComment(commentId: ID!): Reaction
+
   }
 
   # Define the Auth type to handle authentication responses

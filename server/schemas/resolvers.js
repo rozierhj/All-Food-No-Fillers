@@ -188,6 +188,39 @@ const resolvers = {
       await reaction.save();
       return reaction;
     },
+
+    removeComment: async (parent, { commentId }, context) => {
+      if (!context.foodie) throw new AuthenticationError('Please log in to remove a comment.');
+
+      const comment = await Comment.findById(commentId);
+      if (!comment) throw new AuthenticationError('Comment not found.');
+
+      const reaction = await Reaction.findOne({ recipeId: comment.recipeId });
+
+      if (reaction) {
+        reaction.comments = reaction.comments.filter(_id => _id !== commentId);
+        await reaction.save();
+      }
+
+      return reaction;
+    },
+
+    deleteComment: async (parent, { commentId }, context) => {
+      if (!context.foodie) throw new AuthenticationError('Please log in to delete a comment.');
+
+      const comment = await Comment.findById(commentId);
+      if (!comment) throw new AuthenticationError('Comment not found.');
+
+      if (comment.username !== context.foodie.username) {
+        throw new AuthenticationError('You can only delete your own comment.');
+      }
+
+      await Comment.findByIdAndDelete(commentId);
+
+      return comment;
+    },
+
+
   },
 };
 

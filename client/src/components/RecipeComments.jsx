@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { GET_RECIPE_COMMENTS } from '../utils/queries';
+import { REMOVE_COMMENT, DELETE_COMMENT } from '../utils/mutations';
 import { Spinner, ListGroup, Button } from 'react-bootstrap';
 import RecipeComment from './RecipeComment';
 import Auth from '../utils/auth';
@@ -14,6 +15,29 @@ const RecipeComments = ({ recipeId }) => {
   const { loading, error, data, refetch } = useQuery(GET_RECIPE_COMMENTS, {
     variables: { recipeId },
   });
+
+  const [removeComment] = useMutation(REMOVE_COMMENT);
+  const [deleteComment] = useMutation(DELETE_COMMENT);
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      // Step 1: Remove the comment from its associated reaction
+      // alert(commentId);
+      await removeComment({
+        variables: { commentId },
+      });
+      
+      // Step 2: Delete the comment from the database
+      await deleteComment({
+        variables: { commentId },
+      });
+
+      refetch(); // Refetch comments to update the UI
+    } catch (err) {
+      console.error('Error deleting comment:', err);
+    }
+  };
+
 
   //function handles click event for showing the add comment form
   const handleAddCommentClick = () =>{
@@ -40,8 +64,20 @@ const RecipeComments = ({ recipeId }) => {
         // map through the comments and show the username of the commenter followed by their comment
         data.getRecipeComments.map((comment) => (
           <ListGroup.Item key={comment._id} className='comment-item'>
+            <div>
             <strong className='comment-username'>{comment.username}:</strong> 
             <span className='comment-text'>{comment.text}</span>
+            </div>
+            {Auth.loggedIn() && Auth.getProfile().data.username === comment.username && (
+                <Button
+                  variant="danger"
+                  size="sm"
+                  // className="float-right"
+                  onClick={() => handleDeleteComment(comment._id)}
+                >
+                  Delete
+                </Button>
+              )}
           </ListGroup.Item>
         ))
       ) : (

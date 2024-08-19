@@ -17,9 +17,7 @@ import './SearchRecipes.css';
 import WelcomeVideoModal from '../components/WelcomeVideoModal';
 const SEARCH_KEY = import.meta.env.VITE_API_KEY;
 
-// import { index } from '../../../server/models/Recipe';
 const URL = "https://api.spoonacular.com/recipes/complexSearch";
-// const API_KEY= "cdc727804129496c8ed7564453c15133";
 
 const SearchRecipes = () => {
   // state holds recipes from the api after the search
@@ -141,6 +139,8 @@ const SearchRecipes = () => {
               },
               });
 
+              if(detail.data.analyzedInstructions[0] !== null && detail.data.analyzedInstructions[0] !== undefined){
+
               let stepsList = detail.data.analyzedInstructions[0].steps;
 
               for(let stp = 0; stp < stepsList.length; stp++){
@@ -157,7 +157,8 @@ const SearchRecipes = () => {
                 }
                 recipeData[i].steps.push(oneStep);
               }
-              
+            }
+
       };
    
       // CTD loop through recipe data set 
@@ -171,10 +172,6 @@ const SearchRecipes = () => {
       setSearchInput('');
 
       //get user data who is logged in
-      
-      // if (Auth.loggedIn()) {
-      //   getMe();
-      // }
 
     } catch (err) {
       console.error(err);

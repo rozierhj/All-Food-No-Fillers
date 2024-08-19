@@ -17,7 +17,7 @@ const AppNavbar = () => {
           <Navbar.Brand >
             <img src="../../logo-01.jpg" alt="Logo" style={{width: '150px', height: 'auto'}} />
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls='navbar' />
+          <Container aria-controls='navbar' />
           <Navbar.Collapse id='navbar' className='d-flex flex-row-reverse'>
             <Nav className='ml-auto d-flex'>
               <Nav.Link as={Link} to='/' className='text-white'>

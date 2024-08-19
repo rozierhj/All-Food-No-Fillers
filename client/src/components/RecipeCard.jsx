@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Modal, Button, Row, Col, Image, Alert } from 'react-bootstrap';
+import { Modal, Button, Row, Col, Image, Alert, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Auth from '../utils/auth';
 import {GET_ME, GET_RECIPE_REACTION} from '../utils/queries';
 import {UPVOTE_RECIPE, ADD_REACTION, UPDATE_REACTION} from '../utils/mutations';
@@ -19,6 +19,7 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
   //state to control if comments are visible
   const [showComments, setShowComments] = useState(false);
   //state to control is the add comment form is visible
+  const [hasUpvoted, setHasUpvoted] = useState(false);
 
   const [getRecipeReaction, {data:reactionData}] = useLazyQuery(GET_RECIPE_REACTION);
   const [upvotes, setUpvotes] = useState(recipe.upvotes || 0);
@@ -28,13 +29,20 @@ const RecipeCard = ({ show, handleClose, recipe }) => {
     if(recipe){
       getRecipeReaction({variables:{recipeId:recipe.recipeId}})
     }
-  },[recipe]);
+  },[recipe, getRecipeReaction]);
 
   useEffect(()=>{
     if(reactionData?.getRecipeReaction){
       setUpvotes(reactionData.getRecipeReaction.upVotes || 0);
+
+      if(reactionData.getRecipeReaction.upVoters !== undefined){
+      if(meData && reactionData.getRecipeReaction.upVoters.includes(meData.me._id)){
+
+        setHasUpvoted(reactionData.getRecipeReaction.upVoters.includes(meData.me._id));
+      }
     }
-  },[reactionData]);
+    }
+  },[reactionData, meData]);
   //state tracks if user has upvoted recipe
   // const [upvoted, setUpvoted] = useState(false);
   //mutation for handeling upvote
@@ -65,17 +73,22 @@ useEffect(()=>{
   //function for upvoting recipes
   const handleUpvote = async () => {
 
+    if(!Auth.loggedIn()){
+      return false;
+    }
     //confirm user is logged in and has not already upvoted the recipe
       try{
-        console.log(recipe.recipeId, username);
         //mutation for adding a comment is executed
-       const {data} = await upvoteRecipe({
-          variables:{recipeId:recipe.recipeId},
-        });
+        //alert(reactionData.upVoters);
 
-        if(data?.upvoteRecipe){
-          setUpvotes(data.upvoteRecipe.upVotes);
-        }
+          const {data} = await upvoteRecipe({
+             variables:{recipeId:recipe.recipeId},
+           });  
+        
+        const updatedReaction = await data.upvoteRecipe;
+        setUpvotes(updatedReaction.upVotes);
+        setHasUpvoted(!hasUpvoted);
+        
         
     }
     catch(err){
@@ -148,10 +161,15 @@ useEffect(()=>{
           </Button>
           }
         {/* upvote button */}
-        <Button className=' upvote-button bg-danger' onClick={handleUpvote}>
+        <OverlayTrigger
+          placement='top'
+          overlay={<Tooltip id='upvote-tooltip'>upvote</Tooltip>}
+        >
+        <Button className=' upvote-button bg-danger' disabled={!Auth.loggedIn()} onClick={handleUpvote}>
           <span className="upvote-count">{upvotes}</span>
-          <span className="upvote-arrow">⬆️</span>
+          <span className="upvote-arrow">⭐</span>
         </Button>
+        </OverlayTrigger>
       </Modal.Footer>
     </Modal>
   );

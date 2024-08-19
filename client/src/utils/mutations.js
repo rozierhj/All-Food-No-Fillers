@@ -89,6 +89,8 @@ export const ADD_REACTION = gql`
   addReaction(recipeId: $recipeId){
       _id
       recipeId
+      upVotes
+      upVoters
       comments{
         _id
         text
@@ -123,6 +125,7 @@ mutation upvoteRecipe($recipeId: Int!){
     _id
     recipeId
     upVotes
+    upVoters
   }
 
 }

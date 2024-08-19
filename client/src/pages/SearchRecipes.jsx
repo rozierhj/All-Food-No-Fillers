@@ -15,15 +15,17 @@ import { SAVE_RECIPE } from '../utils/mutations';
 import RecipeCard from '../components/RecipeCard';
 import './SearchRecipes.css';
 import WelcomeVideoModal from '../components/WelcomeVideoModal';
+const SEARCH_KEY = import.meta.env.VITE_API_KEY;
+
 // import { index } from '../../../server/models/Recipe';
 const URL = "https://api.spoonacular.com/recipes/complexSearch";
-const API_KEY= "cdc727804129496c8ed7564453c15133";
+// const API_KEY= "cdc727804129496c8ed7564453c15133";
 
 const SearchRecipes = () => {
   // state holds recipes from the api after the search
   const [searchedRecipes, setSearchedRecipes] = useState([]);
   // CTD set state for details
-
+  const [searchTerm, setSearchTerm] = useState('');
   //state controls whether or not the modal with the individual recipecard can be seen
   const [showRecipeCard, setShowRecipeCard] = useState(false);
 
@@ -66,8 +68,6 @@ const SearchRecipes = () => {
     }
   },[refetch]);
 
-
-
  //save a recipe 
   const [saveRecipe] = useMutation(SAVE_RECIPE,{
 
@@ -104,26 +104,24 @@ const SearchRecipes = () => {
       return false;
     }
 
+    setSearchTerm(searchInput);
+
     try {
       //spoonacular api where we get our recipes
       const response = await axios.get('https://api.spoonacular.com/recipes/complexSearch', {
         params: {
           query: searchInput,
-          number: 5, //number of recipes being returned
-          apiKey: `${API_KEY}`,
+          number: 20, //number of recipes being returned
+          apiKey: `${SEARCH_KEY}`,
         },
       });
 
-      console.log(response);
       if (!response) {
         throw new Error('something went wrong!');
       }
-
-      console.log('first api call',response);
       //use keys from api return to retrieve an array of recipe objects
       const  items  = response.data.results;
       
-      console.log(items);
       //go through results recipe array and pull required values
       const recipeData = items.map((recipe) => ({
         recipeId: recipe.id,
@@ -134,20 +132,16 @@ const SearchRecipes = () => {
       }));
       
       for (let i =0; i < recipeData.length; i++){
-        console.log(recipeData[i].recipeId);
+
         const detail= await axios.get
         (`https://api.spoonacular.com/recipes/${recipeData[i].recipeId}/information`, 
           {
               params: {            
-                apiKey: `${API_KEY}`,
+                apiKey: `${SEARCH_KEY}`,
               },
               });
 
-              console.log('second api call', detail);
               let stepsList = detail.data.analyzedInstructions[0].steps;
-              
-
-              console.log('the steps list',stepsList);
 
               for(let stp = 0; stp < stepsList.length; stp++){
 
@@ -161,14 +155,10 @@ const SearchRecipes = () => {
                   oneStep.ingredients.push(stepsList[stp].ingredients[ing].name);
                   oneStep.ingredientsImage.push(stepsList[stp].ingredients[ing].image);
                 }
-                console.log('oneStep',oneStep);
                 recipeData[i].steps.push(oneStep);
               }
               
-              console.log('the recipe data collected',recipeData);
       };
-        const recipeSteps = recipeData.steps;
-        console.log(recipeData);
    
       // CTD loop through recipe data set 
 
@@ -181,9 +171,10 @@ const SearchRecipes = () => {
       setSearchInput('');
 
       //get user data who is logged in
-      if (Auth.loggedIn()) {
-        getMe();
-      }
+      
+      // if (Auth.loggedIn()) {
+      //   getMe();
+      // }
 
     } catch (err) {
       console.error(err);
@@ -277,6 +268,9 @@ const SearchRecipes = () => {
     <div className='recipes'>
       {/* container for the recipe search results */}
       <Container>
+        {searchTerm && (
+          <h3 className='text-center search-text'>Search results for "{searchTerm}" 🧑‍🍳</h3>
+        )}
         <Row>
           {searchedRecipes.map((recipe) => (
             <Col className='oneCard' md="4" key={recipe.recipeId}>

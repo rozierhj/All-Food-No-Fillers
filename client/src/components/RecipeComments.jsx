@@ -19,7 +19,6 @@ const RecipeComments = ({ recipeId }) => {
   const handleAddCommentClick = () =>{
     //turn on the add comment form
     setShowAddComment(true);
-    console.log(recipeId);
   }
 
   const handleCloseCommentAdded = () =>{

@@ -135,7 +135,7 @@ const resolvers = {
     },
 
     addReaction: async(parent,{recipeId}) =>{
-      const newReaction = await Reaction.create({recipeId:recipeId, comments:[], upVotes: 0 }
+      const newReaction = await Reaction.create({recipeId:recipeId, comments:[], upVotes: 0, upVoters:[] }
       );
       return newReaction;
     },
@@ -151,13 +151,29 @@ const resolvers = {
     },
     //add an upvote to a recipe
     upvoteRecipe: async (parent, {recipeId}, context) => {
-
+      if(!context.foodie) throw new AuthenticationError('please log in to up vote');
       //test if the recipe is in the reactions collection
       let reaction = await Reaction.findOne({recipeId});
 
-      //if recipe is in the reactions collection then increase its upvotes by one
       if(reaction){
+
+        if (!reaction.upVoters) {
+          reaction.upVoters = [];
+        }
+
+      if(reaction.upVoters.includes(context.foodie._id)){
+
+        reaction.upVotes -= 1;
+        reaction.upVoters = reaction.upVoters.filter(
+          (userId) => userId.toString() !== context.foodie._id.toString()
+        );
+      } else {
+
         reaction.upVotes += 1;
+        reaction.upVoters.push(context.foodie._id);
+      }
+
+
       }
       else{
         //if recipe was not in reactions collection then add it to the collection and set its upvotes to one
@@ -165,6 +181,7 @@ const resolvers = {
           recipeId,
           upVotes: 1,
           comments: [],
+          upVoters: [context.foodie._id]
         });
       }
 

@@ -3,13 +3,13 @@ const {gql} = require('apollo-server-express');
 const typeDefs = gql`
 
  #define step input
+
  input StepInput{
  step: String!
  ingredients: [String]
  ingredientsImage: [String]
  }
 
-  # Define the Recipe type
   type Recipe {
     _id: ID
     recipeId: Int
@@ -24,7 +24,6 @@ const typeDefs = gql`
     ingredientsImage:[String]
   }
 
-  # Define the Foodie type
   type Foodie {
     _id: ID
     username: String!
@@ -34,15 +33,13 @@ const typeDefs = gql`
     savedRecipes: [Recipe]
   }
 
-  # Define the Query type
   type Query {
     me: Foodie
     getRecipeComments(recipeId: Int!): [Comment]
     getWelcomeVideo: String
     getRecipeReaction(recipeId: Int!): Reaction
   }
-
-  #Define Comment type
+  
   type Comment {
   _id: ID
   text: String
@@ -50,12 +47,12 @@ const typeDefs = gql`
   recipeId: Int
 }
 
- #define the Reaction type
  type Reaction {
  _id: ID
  recipeId: Int!
  upVotes: Int
  comments: [Comment]
+ upVoters: [ID]
  }
 
 

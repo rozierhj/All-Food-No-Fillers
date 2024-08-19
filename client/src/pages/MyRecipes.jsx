@@ -99,7 +99,7 @@ const SavedRecipes = () => {
         </Container>
       </div>
       {/* favorited recipes container */}
-      <Container>
+      <Container id='saved-recipes'>
         <div  className='recipes'>
         <Row>
           {foodieData.savedRecipes.map((recipe) => {

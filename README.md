@@ -2,7 +2,7 @@
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
   ## Description 
-    Project to create a website where users can search for books by name. The website returns the users search with a card display for each search result. each card has on it an image, title, author(s), description and link to the book online. Users can create an account so that they can save books to their favorites list. They can go back and look at the list and remove any books if the want to.   
+    Project to create a website where users can search for recipes. The site returns a list of recipes with their name, image, the steps to create the recipe and the ingredients necessary for each step along with an image for each ingredient. The User has the ability to create an account so that they can save their favorite recipes, upvote recipes and comment on recipes. Users without accounts may search for recipes, view comments and upvotes but can not save, upvote or comment on recipes themselves. The website is retreving the recipe data using the spoonacular api: https://spoonacular.com/food-api.
 
   ## Table of Contents
 
@@ -14,7 +14,7 @@
   - [Questions](#questions)  
 
   ## Installation
-    React proeject using vite, JSON Web tokens and apollo server. Also utilizing bootstrap library, jwt-decode, bcrypt, express, mongoDB database with mongoose library, bcrypt and graphql
+    React proeject using vite, JSON Web tokens and apollo server. Also utilizing react-bootstrap library, jwt-decode, bcrypt, express, mongoDB database with mongoose library, bcrypt and graphql.
 
   ## Usage
 
@@ -22,17 +22,18 @@
   #### [link to the git repository](https://github.com/rozierhj/All-Food-No-Fillers)
   #### [link to the website](https://all-food-no-fillers.onrender.com)
 
-    When the user first opens the website they are brought to a page with a search bar to submit book searches by the books name. 
-    There is also a page header where the user is given a menu option to login to their account or to signup for an account.
-    After logging in or signing up the user is taken back to the search page where they can continue searching for books. They now have the option to save a book to their favorites.
-    In the header menu for the user when they are signed in there is the option to go to their saved book list. Once they are on their saved books page they have the option to remove any books they want. Just like the search results, each book card displays an image for the book, the title, author(s), description and a link to the book online. The header menu also gives the user the option to go back to the search page to search for more books as well as the option to log out.
+    When the user first opens the website they are brought to a page with a search bar to submit submit searches for recipes. The user can choose the number of results they would like to return between 1 and 20. When they search the recipe the recipes come back as cards, each displaying the recipe name and an image. When the user selects the recipe card the are given details about the recipe, including the steps to create the recipe and all of the ingredients required for each step.
+    Users are able to create accounts for this website. When a user creates an account they are taken to the main search page were a welcome video plays. Along with the general search abilaties, the user is now able to save favorite recipes, upvote recipes and comment on recipes. Users can remove upvotes as well as previously saved recipes. Users can also edit and delete their comments. Users can also remove favorited recipes.
 
   ## License
 
   Application is covered under the [MIT license](https://opensource.org/licenses/MIT)
 
   ## Contributing
-    n/a
+    Duffey, Chris
+    Rozier, Hunter
+    Nexus, Tom
+    Ferguson, Michael
 
   ## Tests
     n/a

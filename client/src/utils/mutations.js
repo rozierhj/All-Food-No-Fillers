@@ -159,3 +159,14 @@ export const DELETE_COMMENT = gql`
     }
   }
 `;
+
+export const EDIT_COMMENT = gql`
+  mutation editComment($commentId: ID!, $newText: String!) {
+    editComment(commentId: $commentId, newText: $newText) {
+      _id
+      text
+      username
+      recipeId
+    }
+  }
+`;

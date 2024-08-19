@@ -220,6 +220,30 @@ const resolvers = {
       return comment;
     },
 
+    editComment: async (parent, { commentId, newText }, context) => {
+      if (!context.foodie) throw new AuthenticationError('You must be logged in to edit a comment.');
+    
+      // Find the comment by its ID
+      const comment = await Comment.findById(commentId);
+    
+      if (!comment) {
+        throw new Error('Comment not found');
+      }
+    
+      // Ensure that the user is editing their own comment
+      if (comment.username !== context.foodie.username) {
+        throw new AuthenticationError('You can only edit your own comments');
+      }
+    
+      // Update the comment's text
+      comment.text = newText;
+    
+      // Save the updated comment
+      await comment.save();
+    
+      return comment; // Return the updated comment
+    },
+
 
   },
 };

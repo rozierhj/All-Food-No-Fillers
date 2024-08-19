@@ -80,6 +80,8 @@ const typeDefs = gql`
 
     removeComment(commentId: ID!): Reaction
 
+    editComment(commentId: ID!, newText: String!): Comment
+
   }
 
   # Define the Auth type to handle authentication responses

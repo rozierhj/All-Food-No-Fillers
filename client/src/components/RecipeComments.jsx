@@ -10,6 +10,7 @@ import './RecipeComments.css';
 const RecipeComments = ({ recipeId }) => {
   //state controls of the add comment form
   const [showAddComment, setShowAddComment] = useState(false);
+  const [editingComment, setEditingComment] = useState(null);
 
   //execute get recipe comments query using the recipe id to find related comments
   const { loading, error, data, refetch } = useQuery(GET_RECIPE_COMMENTS, {
@@ -38,10 +39,14 @@ const RecipeComments = ({ recipeId }) => {
     }
   };
 
-
+  const handleEditCommentClick = (comment) => {
+    setEditingComment(comment); // set the comment to be edited
+    setShowAddComment(true); // show the comment form for editing
+  };
   //function handles click event for showing the add comment form
   const handleAddCommentClick = () =>{
     //turn on the add comment form
+    setEditingComment(null);
     setShowAddComment(true);
   }
 
@@ -69,14 +74,23 @@ const RecipeComments = ({ recipeId }) => {
             <span className='comment-text'>{comment.text}</span>
             </div>
             {Auth.loggedIn() && Auth.getProfile().data.username === comment.username && (
-                <Button
-                  variant="danger"
-                  size="sm"
-                  // className="float-right"
-                  onClick={() => handleDeleteComment(comment._id)}
-                >
-                  Delete
-                </Button>
+                <div>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="ml-2"
+                    onClick={() => handleEditCommentClick(comment)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDeleteComment(comment._id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
               )}
           </ListGroup.Item>
         ))
@@ -85,13 +99,20 @@ const RecipeComments = ({ recipeId }) => {
       )}
     </ListGroup>
       {/* show add comment button if the user is logged in and the comment form is not already being shown */}
-    {Auth.loggedIn()&& !showAddComment && (
-      <Button variant='danger' onClick={handleAddCommentClick} className='mt-3'>
-        Add Comment
-      </Button>
-    )}
+      {Auth.loggedIn() && !showAddComment && (
+        <Button variant='danger' onClick={() => handleAddCommentClick(true)} className='mt-3'>
+          Add Comment
+        </Button>
+      )}
     {/* show the add comment modal if showAddComment is true (user clicked add comment) */}
-    {showAddComment && (<RecipeComment recipeId={recipeId} refetchComments={refetch} onClose={handleCloseCommentAdded}/>)}
+    {showAddComment && (
+        <RecipeComment
+          recipeId={recipeId}
+          refetchComments={refetch}
+          onClose={handleCloseCommentAdded}
+          editingComment={editingComment} // pass the editing comment to the RecipeComment component
+        />
+      )}
     </div>
 
   );

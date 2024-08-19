@@ -17,10 +17,14 @@ import './SearchRecipes.css';
 import WelcomeVideoModal from '../components/WelcomeVideoModal';
 const SEARCH_KEY = import.meta.env.VITE_API_KEY;
 
+
 const URL = "https://api.spoonacular.com/recipes/complexSearch";
 
 const SearchRecipes = () => {
   
+  //number of recipes API will return in search
+  const [numberOfRecipes, setNumberOfRecipes] = useState(10); 
+
   //recipes from the api after the search
   const [searchedRecipes, setSearchedRecipes] = useState([]);
 
@@ -117,7 +121,7 @@ const SearchRecipes = () => {
       const response = await axios.get('https://api.spoonacular.com/recipes/complexSearch', {
         params: {
           query: searchInput,
-          number: 20, //number of recipes being returned
+          number: numberOfRecipes, //number of recipes being returned
           apiKey: `${SEARCH_KEY}`,
         },
       });
@@ -260,6 +264,20 @@ const SearchRecipes = () => {
                   size='lg'
                   placeholder='bon appetit'
                 />
+                <h5>Number of Recipes to Search</h5>
+                <Form.Control
+              as="select"
+              className="ml-2"
+              style={{ width: '80px', display: 'inline-block' }}
+              value={numberOfRecipes}
+              onChange={(e) => setNumberOfRecipes(e.target.value)}
+            >
+              {[...Array(20)].map((_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
+            </Form.Control>
                 <Button type='submit' variant='danger' size='lg' className='text-black border-black  '>
                   Find Recipe
                 </Button>

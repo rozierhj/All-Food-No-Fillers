@@ -15,7 +15,7 @@
   - [Image]  
 
   ## Installation
-    React proeject using vite, JSON Web tokens and apollo server. Also utilizing react-bootstrap library, jwt-decode, bcrypt, express, mongoDB database with mongoose library, bcrypt and graphql.
+    React proeject using vite, JSON Web tokens and apollo server. Also utilizing react-bootstrap library, jwt-decode, bcrypt, express, mongoDB database with mongoose library, bcrypt and graphql, Node.js, express.js.
 
   ## Usage
 

@@ -20,26 +20,32 @@ const SEARCH_KEY = import.meta.env.VITE_API_KEY;
 const URL = "https://api.spoonacular.com/recipes/complexSearch";
 
 const SearchRecipes = () => {
-  // state holds recipes from the api after the search
+  
+  //recipes from the api after the search
   const [searchedRecipes, setSearchedRecipes] = useState([]);
-  // CTD set state for details
+
+  // current search text
   const [searchTerm, setSearchTerm] = useState('');
-  //state controls whether or not the modal with the individual recipecard can be seen
+
+  //controls if user can see individual recipe detail card
   const [showRecipeCard, setShowRecipeCard] = useState(false);
 
-  //state holds the recipe data that will be on the recipecard
+  //recipe data that will be on the recipecard
   const [selectedRecipe, setSelectedRecipe] = useState(null);
 
-  // create state for holding our search field data
+  // user input in the search form
   const [searchInput, setSearchInput] = useState('');
 
+  //controls if user can see opening signup modal
   const [showVideoModal, setShowVideoModal] = useState('');
 
+  //ids of the recipes the user saved
   const [savedRecipeIds, setSavedRecipeIds] = useState([]);
 
-    //fetch the logged-in user's data (GET_ME query) when needed.
+  //get logged in users data
  const [getMe, {data: meData, refetch}] = useLazyQuery(GET_ME);
 
+ //get the reaction to a recipe
   const [getRecipeReaction, {data:reactionData}] = useLazyQuery(GET_RECIPE_REACTION);
 
   useEffect(() => {
@@ -54,19 +60,21 @@ const SearchRecipes = () => {
       localStorage.setItem('searchedRecipes', JSON.stringify([]));
     }
 
+    //check local storage for key to determine is this is users first login and video should be played
     if (localStorage.getItem('firstLogin')){
       setShowVideoModal(true);
       localStorage.removeItem('firstLogin');
     }
   }, []);
 
+  //refetch user data if they are loggedin
   useEffect(()=>{
     if(Auth.loggedIn()){
       refetch();
     }
   },[refetch]);
 
- //save a recipe 
+ //save a recipe to users saved recipe list
   const [saveRecipe] = useMutation(SAVE_RECIPE,{
 
     //update the Apollo Client cache with the users new saved recipe
@@ -94,7 +102,7 @@ const SearchRecipes = () => {
     }
   },[meData]);
 
-  // search for books and set state on form submit
+  
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -160,8 +168,6 @@ const SearchRecipes = () => {
             }
 
       };
-   
-      // CTD loop through recipe data set 
 
       //update searchedRecipes state with the new recipe data
       setSearchedRecipes(recipeData);
@@ -170,8 +176,6 @@ const SearchRecipes = () => {
       localStorage.setItem('searchedRecipes', JSON.stringify(recipeData));
       //reset searchinput state
       setSearchInput('');
-
-      //get user data who is logged in
 
     } catch (err) {
       console.error(err);

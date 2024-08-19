@@ -23,7 +23,7 @@ const AppNavbar = () => {
               <Nav.Link as={Link} to='/' className='text-white'>
                 Find Recipes
               </Nav.Link>
-              {/* if user is logged in show saved books and logout */}
+              
               {Auth.loggedIn() ? (
                 <>
                   <Nav.Link as={Link} to='/saved' className='text-white'>

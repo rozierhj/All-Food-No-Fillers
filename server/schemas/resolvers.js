@@ -10,7 +10,7 @@ const resolvers = {
 
       if (context.foodie) {
 
-        //show users saved recipies
+        //return user and their saved recipes
         return Foodie.findOne({ _id: context.foodie._id }).populate('savedRecipes');
       }
       throw new AuthenticationError('You must be logged in!');
@@ -21,10 +21,12 @@ const resolvers = {
       return await Comment.find({ recipeId });
     },
 
+    //get a reaction for a recipe it will have comments and upvotes and upvoters
     getRecipeReaction: async (parent, {recipeId}) =>{
       return await Reaction.findOne({recipeId});
     },
 
+    //getting the location of the welcome video for users who first signup
     getWelcomeVideo: async () => {
       const videoUrl = '../../public/welcome.mp4';
       return videoUrl;
@@ -119,11 +121,14 @@ const resolvers = {
         },
       {new:true});
 
+      //find the reaction to add the comment to using the recipeID
         let reaction = await Reaction.findOne({recipeId});
 
+        //if you find recipe id then add comment to its comments list
         if(reaction){
           await resolvers.Mutation.updateReaction(parent,{reactionId: reaction._id, commentId: newComment._id})
         }
+        //if we can't find a reaction than create one and give it the recipeId and the commentId
         else{
           await resolvers.Mutation.addReaction(parent,{recipeId: recipeId, commentId: newComment._id})
         }
@@ -134,14 +139,16 @@ const resolvers = {
       throw new AuthenticationError('You must be logged in to add a comment');
     },
 
+    //add a reaction and set all the fields to defaults
     addReaction: async(parent,{recipeId}) =>{
       const newReaction = await Reaction.create({recipeId:recipeId, comments:[], upVotes: 0, upVoters:[] }
       );
       return newReaction;
     },
 
+    //this updateReaction is for adding new comments only
     updateReaction: async(parent, {reactionId, commentId }) =>{
-
+      //find the reaction by its id and then add the comments to its comments array
       const updatedReaction = await Reaction.findByIdAndUpdate(reactionId,
         {$addToSet:{comments:commentId}},
         {new: true}
@@ -152,22 +159,27 @@ const resolvers = {
     //add an upvote to a recipe
     upvoteRecipe: async (parent, {recipeId}, context) => {
       if(!context.foodie) throw new AuthenticationError('please log in to up vote');
-      //test if the recipe is in the reactions collection
+      
+      //get the reaction by its recipe
       let reaction = await Reaction.findOne({recipeId});
 
       if(reaction){
 
+        //used to deal with old reactions that do not have an upvoters field.
         if (!reaction.upVoters) {
           reaction.upVoters = [];
         }
 
+        //if the user is in the upVoters list then this upVote action will decrease the upvote count and remove the user from the upVoters group
       if(reaction.upVoters.includes(context.foodie._id)){
 
         reaction.upVotes -= 1;
         reaction.upVoters = reaction.upVoters.filter(
           (userId) => userId.toString() !== context.foodie._id.toString()
         );
-      } else {
+      }
+      //if the user is not on the upVoters list than add them to it and increase upVotes count by 1 
+      else {
 
         reaction.upVotes += 1;
         reaction.upVoters.push(context.foodie._id);
@@ -176,7 +188,7 @@ const resolvers = {
 
       }
       else{
-        //if recipe was not in reactions collection then add it to the collection and set its upvotes to one
+        //if recipe was not in reactions collection then add it to the collection and set its upvotes to one and add the user to the upVoters
         reaction = await Reaction.create({
           recipeId,
           upVotes: 1,
@@ -189,12 +201,14 @@ const resolvers = {
       return reaction;
     },
 
+    //remove a comment from the reaction it was in (this does not delete the comment)
     removeComment: async (parent, { commentId }, context) => {
       if (!context.foodie) throw new AuthenticationError('Please log in to remove a comment.');
 
       const comment = await Comment.findById(commentId);
       if (!comment) throw new AuthenticationError('Comment not found.');
 
+      //find the correct reaction using the matching recipeId
       const reaction = await Reaction.findOne({ recipeId: comment.recipeId });
 
       if (reaction) {
@@ -205,6 +219,7 @@ const resolvers = {
       return reaction;
     },
 
+    //delete a comment from its database collection
     deleteComment: async (parent, { commentId }, context) => {
       if (!context.foodie) throw new AuthenticationError('Please log in to delete a comment.');
 
@@ -220,6 +235,7 @@ const resolvers = {
       return comment;
     },
 
+    //edit the text in an existing comment
     editComment: async (parent, { commentId, newText }, context) => {
       if (!context.foodie) throw new AuthenticationError('You must be logged in to edit a comment.');
     
@@ -238,10 +254,10 @@ const resolvers = {
       // Update the comment's text
       comment.text = newText;
     
-      // Save the updated comment
+     
       await comment.save();
     
-      return comment; // Return the updated comment
+      return comment;
     },
 
 

@@ -1,28 +1,44 @@
-# Pass JWT to Resolver with Context (Server-side)
+# All Food No Fillers
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-In this demo, you will verify if a token is valid and carry
+  ## Description 
+    Project to create a website where users can search for books by name. The website returns the users search with a card display for each search result. each card has on it an image, title, author(s), description and link to the book online. Users can create an account so that they can save books to their favorites list. They can go back and look at the list and remove any books if the want to.   
 
-## Instructions
+  ## Table of Contents
 
-* Run `npm install` and `npm run seed` to set up the database.
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [License](#license)
+  - [Contributing](#contributing)
+  - [Tests](#tests)
+  - [Questions](#questions)  
 
-* Open [server.js](server/server.js) and explain the following:
+  ## Installation
+    React proeject using vite, JSON Web tokens and apollo server. Also utilizing bootstrap library, jwt-decode, bcrypt, express, mongoDB database with mongoose library, bcrypt and graphql
 
-  * We can add another option to our Apollo Server configuration called `context`, which is a lot like middleware in Express.
+  ## Usage
 
-  * This will allow us to intercept any request to the server and check if there's a valid JWT before the request gets to the resolver.
+  #### [link to the application demonstration video](#)
+  #### [link to the git repository](https://github.com/rozierhj/All-Food-No-Fillers)
+  #### [link to the website](https://all-food-no-fillers.onrender.com)
 
-* Open [auth.js](server/utils/auth.js) and explain the `authMiddleware` function:
+    When the user first opens the website they are brought to a page with a search bar to submit book searches by the books name. 
+    There is also a page header where the user is given a menu option to login to their account or to signup for an account.
+    After logging in or signing up the user is taken back to the search page where they can continue searching for books. They now have the option to save a book to their favorites.
+    In the header menu for the user when they are signed in there is the option to go to their saved book list. Once they are on their saved books page they have the option to remove any books they want. Just like the search results, each book card displays an image for the book, the title, author(s), description and a link to the book online. The header menu also gives the user the option to go back to the search page to search for more books as well as the option to log out.
 
-  * Whenever we make a request to our server, we will check if there's a token with the request and attempt to verify and decode it if there is.
+  ## License
 
-  * We use the `return` statement to return the `req` object, either modified with user data or not modified at all, and the request will continue to go to its intended resolver function.
+  Application is covered under the [MIT license](https://opensource.org/licenses/MIT)
 
-* Open [resolvers.js](server/schemas/resolvers.js) and explain the following:
+  ## Contributing
+    n/a
 
-  * Any time we need to implement authentication on a query or mutation, we can add a third parameter called `context` to the resolver function.
+  ## Tests
+    n/a
 
-  * The `context` object is whatever has been returned from our `authMiddleware` function, so it may or may not include a `user` property depending on the status of the JSON Web Token.
+  ## Questions
 
-  * If there is a `user` property, we can assume the user's token has been verified and the `user` property now holds data about the user that we stored in the token itself.
+  #### Github user profile for: [rozierhj](https://github.com/rozierhj)
+  #### For more information, you can email at: [hunter.rozier@yahoo.com](hunter.rozier@yahoo.com)
 

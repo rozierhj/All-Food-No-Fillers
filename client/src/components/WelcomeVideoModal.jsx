@@ -34,9 +34,6 @@ const WelcomeVideoModal = ({show, handleClose})=>{
             </Button>
         </Modal.Body>
         <Modal.Footer>
-            {/* <Button variant="secondary" onClick={handleClose}>
-                Close
-            </Button> */}
         </Modal.Footer>
     </Modal>
 
